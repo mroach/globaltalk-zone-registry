@@ -1,0 +1,73 @@
+module DDNS
+  CurrentNetwork = IPAddr.new("0.0.0.0/8")
+  CGNAT = IPAddr.new("100.64.0.0/10")
+  DSLite = IPAddr.new("192.0.0.0/29")
+  TestNet1 = IPAddr.new("192.0.2.0/24")
+  TestNet2 = IPAddr.new("198.51.100.0/24")
+  TestNet3 = IPAddr.new("203.0.113.0/24")
+  Benchmarking = IPAddr.new("198.18.0.0/15")
+  Multicast = IPAddr.new("224.0.0.0/4")
+  BCAST = IPAddr.new("255.255.255.255")
+
+  Error = Class.new(StandardError)
+  NotAllowedError = Class.new(Error)
+
+  extend self
+
+  def domain_name
+    ENV.fetch("DDNS_DOMAIN_NAME", "ddns.globaltalk.zone")
+  end
+
+  def make_fqdn(subdomain)
+    "#{subdomain}.#{domain_name}"
+  end
+
+  def ip_from(ip)
+    case ip
+    in String => str
+      IPAddr.new(ip)
+    in IPAddr => addr
+      addr
+    end
+  end
+
+  def permit!(ip)
+    ip = ip_from(ip)
+
+    # IPv6 will never work on classic Macs
+    unless ip.ipv4?
+      raise NotAllowedError.new("Only IPv4 is allowed")
+    end
+
+    unless ip.prefix == 32
+      raise NotAllowedError.new("Networks are not allowed")
+    end
+
+    if ip.private?
+      raise NotAllowedError.new("Private IPs are not allowed")
+    end
+
+    if ip.link_local? || ip.loopback? || CurrentNetwork.include?(ip)
+      raise NotAllowedError.new("Link-local and loopback address are not allowed")
+    end
+
+    if CGNAT.include?(ip)
+      raise NotAllowedError.new("CG-NAT addresses are not allowed")
+    end
+
+    if Benchmarking.include?(ip) ||
+        TestNet1.include?(ip) ||
+        TestNet2.include?(ip) ||
+        TestNet3.include?(ip) ||
+        DSLite.include?(ip) ||
+        Multicast.include?(ip)
+      raise NotAllowedError.new("Not internet routable")
+    end
+
+    if ip == BCAST
+      raise NotAllowedError.new("You must be joking")
+    end
+
+    ip
+  end
+end

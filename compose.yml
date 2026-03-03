@@ -1,0 +1,47 @@
+name: globaltalk
+
+services:
+  db:
+    image: postgres:${PGMAJOR:-18}
+    command: ["postgres", "-c", "log_statement=all"]
+    environment:
+      - POSTGRES_USER=globaltalk
+      - POSTGRES_PASSWORD=globaltalk
+    ports:
+      - ${DB_PORT:-54329}:5432
+    volumes:
+      - pg_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
+
+  app:
+    build:
+      context: "."
+      dockerfile: dev.Dockerfile
+      args:
+        pgmajor: ${PGMAJOR:-18}
+    command: ["bin/dev"]
+    environment:
+      - BINDING=0.0.0.0
+      - DB_HOST=db
+      - DB_NAME=globaltalk
+      - DB_PASSWORD=globaltalk
+      - DB_USERNAME=globaltalk
+    ports:
+      - ${PORT:-5009}:3000
+    volumes:
+      - .:/opt/app
+      - bundler:/usr/local/bundle
+      - app_tmp:/opt/app/tmp
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  app_tmp:
+  bundler:
+  pg_data:
