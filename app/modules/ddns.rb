@@ -12,6 +12,9 @@ module DDNS
   Error = Class.new(StandardError)
   NotAllowedError = Class.new(Error)
 
+  NAME_PART_REGEX = /\A[a-z0-9][a-z0-9-]*[a-z0-9]*\z/
+  private_constant :NAME_PART_REGEX
+
   extend self
 
   def domain_name
@@ -22,6 +25,28 @@ module DDNS
     "#{subdomain}.#{domain_name}"
   end
 
+  # Validates if the input is a valid *part* of a FQDN.
+  #   ok:   domain, my-domain, my-domain123
+  #   bad:  9domain, MYDOMAIN, MY_DOMAIN
+  def valid_name_part?(input)
+    NAME_PART_REGEX.match?(input)
+  end
+
+  # Basic barebones hostname validation.
+  # a-z, 0-9, dashes, more than one part. That's it.
+  #
+  # @param input [String]
+  def valid_fqdn?(input)
+    return false if input.blank?
+
+    # Yes technically it's correct to end a hostname with `.` but we're not considering
+    # that right here. That's for other layers of the app.
+    return false if input[-1] == "."
+
+    parts = input.split(".")
+    parts.count > 1 && parts.all? { valid_name_part?(it) }
+  end
+
   def ip_from(ip)
     case ip
     in String => str
@@ -29,6 +54,13 @@ module DDNS
     in IPAddr => addr
       addr
     end
+  end
+
+  def valid_ip?(ip)
+    permit!(ip)
+    true
+  rescue NotAllowedError, IPAddr::InvalidAddressError
+    false
   end
 
   def permit!(ip)

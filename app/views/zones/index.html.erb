@@ -1,0 +1,24 @@
+<%= link_to("New", new_zone_path) %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Endpoint</th>
+      <th>Approved?</th>
+      <th>Enabled?</th>
+      <th>Network Numbers</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @zones.each do |zone| %>
+      <tr>
+        <td><%= link_to(zone.ethertalk_zone_name, zone) %></td>
+        <td><%= zone.public_endpoint %></td>
+        <td><%= zone.approved? %></td>
+        <td><%= zone.enabled? %></td>
+        <td><%= zone.network_ranges.map { format("%d-%d", it.begin, it.end-1) }.join(", ") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

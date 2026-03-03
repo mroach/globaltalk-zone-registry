@@ -16,7 +16,7 @@ class CreateZones < ActiveRecord::Migration[8.1]
       t.timestamp :last_verified_at
 
       t.citext :ddns_subdomain
-      t.inet   :ddns_ip
+      t.inet :ddns_ip
       t.string :ddns_password_digest
 
       # Unique constraints

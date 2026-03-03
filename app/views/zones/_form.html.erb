@@ -1,0 +1,23 @@
+<div><%= @zone.errors.messages %></div>
+<%= form_with(model: @zone) do |form| %>
+  <div>
+    <%= form.label(:ethertalk_zone_name) %>
+    <%= form.text_field(:ethertalk_zone_name) %>
+  </div>
+
+  <div>
+    <%= form.label(:localtalk_zone_name) %>
+    <%= form.text_field(:localtalk_zone_name) %>
+  </div>
+
+  <div>
+    <%= form.label(:public_endpoint) %>
+    <%= form.text_field(:public_endpoint) %>
+  </div>
+  <div>
+    <%= form.label(:network_ranges) %>
+    <%= form.text_field(:network_ranges, value: @zone.network_ranges_s) %>
+  </div>
+
+  <%= form.submit %>
+<% end %>
