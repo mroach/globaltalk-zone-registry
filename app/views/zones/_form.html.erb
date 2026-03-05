@@ -1,23 +1,43 @@
 <div><%= @zone.errors.messages %></div>
 <%= form_with(model: @zone) do |form| %>
   <div>
-    <%= form.label(:ethertalk_zone_name) %>
-    <%= form.text_field(:ethertalk_zone_name) %>
+    <%= form.label(:name) %>
+    <%= form.text_field(:name) %>
   </div>
 
   <div>
-    <%= form.label(:localtalk_zone_name) %>
-    <%= form.text_field(:localtalk_zone_name) %>
-  </div>
-
-  <div>
-    <%= form.label(:public_endpoint) %>
-    <%= form.text_field(:public_endpoint) %>
+    <%= form.label(:physical_layer) %>
+    <%= form.select(:physical_layer, @options.fetch(:physical_layer)) %>
   </div>
   <div>
     <%= form.label(:network_ranges) %>
-    <%= form.text_field(:network_ranges, value: @zone.network_ranges_s) %>
+    <%= form.text_field(:network_ranges, value: @zone.network_ranges_s, placeholder: "1234, 1235-1236") %>
   </div>
+  <div>
+    <%= form.label(:about) %>
+    <%= form.text_area(:about) %>
+  </div>
+
+
+  <fieldset>
+    <legend>Public Static Endpoint</legend>
+    <div>
+      <%= form.label(:public_endpoint) %>
+      <%= form.text_field(:public_endpoint, placeholder: "IPv4 address or hostname") %>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Dynamic DNS</legend>
+    <div>
+      <%= form.label(:ddns_subdomain) %>
+      <%= form.text_field(:ddns_subdomain, readonly: true) %>
+    </div>
+    <div>
+      <%= form.label(:ddns_ip) %>
+      <%= form.text_field(:ddns_ip, readonly: true) %>
+    </div>
+  </fieldset>
 
   <%= form.submit %>
 <% end %>

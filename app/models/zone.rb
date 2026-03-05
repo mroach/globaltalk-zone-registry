@@ -1,16 +1,20 @@
 class Zone < ApplicationRecord
   class << self
+    # Convert a variety of inputs into an array of ranges.
+    #
+    # @param value [Range | Integer | String | Array<Range | Integer | String>]
+    # @return [Array<Range>]
     def parse_network_ranges(value)
       case value
       in Range => r
         [r]
       in Integer => i
         parse_network_ranges(Range.new(i, i))
-      in String => str if str.match?(/\A\d+\z/)                 # 123
-        parse_network_ranges(str.to_i)
-      in String => str if str.match?(/[,\s]/)                   # 123, 45-67, 90
+      in String => str if m = str.strip.match(/\A\d+\z/)          # 123
+        parse_network_ranges(m[0].to_i)
+      in String => str if str.match?(/[,\s]/)                     # 123, 45-67, 90
         parse_network_ranges(str.split(/[,\s]+/).map(&:presence).compact)
-      in String => str if m = str.match(/\A(\d+)-(\d+)\z/)      # 444-555
+      in String => str if m = str.strip.match(/\A(\d+)-(\d+)\z/)  # 444-555
         parse_network_ranges(Range.new(m[1].to_i, m[2].to_i))
       in Array => arr
         arr.flat_map { parse_network_ranges(it) }
@@ -24,18 +28,19 @@ class Zone < ApplicationRecord
 
   has_secure_password :ddns_password, validations: false
 
-  normalizes :localtalk_zone_name, with: ->(s) { s.strip }
-  normalizes :ethertalk_zone_name, with: ->(s) { s.strip }
+  string_enum :physical_layer, ["ethertalk", "localtalk", "tokentalk", "fdditalk"]
+
+  normalizes :name, with: ->(s) { s.strip }
   normalizes :ddns_subdomain, with: ->(s) { s.strip.downcase }
   normalizes :network_ranges, with: ->(list) { list.sort_by(&:begin) }
 
-  validates :ethertalk_zone_name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: {scope: :physical_layer}
   validates :public_endpoint, presence: true, uniqueness: true, public_endpoint: true
   validates :ddns_subdomain, :allow_nil => true, "ddns/subdomain" => true
 
-  # TODO: validate zone ID values (between 0 and 65535)
+  # TODO: validate network range values (between 0 and 65535)
   # TODO: validate no overlap with other zones
-  # TODO: validate no self-overlap (e.g 1-100, 50-90)
+  # TODO: validate no self-overlap (e.g 1-100, 90-220) (or just normalize them?)
 
   scope :approved, -> { where.not(approved_at: nil) }
   scope :enabled, -> { where.not(disabled_at: nil) }

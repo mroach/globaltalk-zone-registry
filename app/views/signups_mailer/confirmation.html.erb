@@ -1,0 +1,7 @@
+<h1>Welcome to Global Talk!</h1>
+<p>
+  You can confirm your email and
+  <%= link_to "complete sign up on this page", confirm_signup_url(@user.email_confirmation_token) %>.
+
+  This link will expire in <%= distance_of_time_in_words(0, @user.email_confirmation_token_expires_in) %>.
+</p>

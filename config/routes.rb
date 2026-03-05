@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   # DynDNS2 protocol https://help.dyn.com/perform-update.html
   get "/nic/update", to: "ddns#update"
 
+  resources :signups, only: [:new, :create], param: :token do
+    get :confirm, on: :member
+  end
   resources :zones
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
@@ -19,5 +22,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "home#index"
 end

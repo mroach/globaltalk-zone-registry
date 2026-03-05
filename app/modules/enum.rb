@@ -13,9 +13,7 @@ module Enum
     klass = Class.new
     klass.extend(ClassMethods)
 
-    members = members.to_h do |key, value|
-      [key, value.freeze]
-    end
+    members = members.to_h { |key, value| [key, value.freeze] }.freeze
 
     members.each do |key, value|
       const_name = key.to_s.parameterize.underscore.upcase.to_sym
@@ -63,6 +61,32 @@ module Enum
       end
 
       members.slice(*wanted_keys).values.to_set
+    end
+
+    # Translate the enum value or key into a label
+    #
+    # @param input [String] Key or value
+    # @return [String]
+    def label_for(input)
+      key = if keys.include?(input)
+        input
+      elsif (k = key(input))
+        k
+      else
+        # probably not going to work, but go for it
+        input
+      end
+
+      scope = ["enum", *name.underscore.split("/")]
+      I18n.t(key, scope:)
+    end
+
+    # Get an options array that the Rails form helpers use
+    #
+    # @return [Array<String, String>]
+    #   Array of two-element arrays of [label, value]
+    def to_options
+      members.map { |k, v| [label_for(k), v] }
     end
   end
 end

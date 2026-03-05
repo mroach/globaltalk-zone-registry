@@ -28,4 +28,10 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  enum:
+    zone:
+      physical_layer:
+        ethertalk: EtherTalk
+        localtalk: LocalTalk
+        tokentalk: TokenTalk
+        fdditalk: FDDITalk

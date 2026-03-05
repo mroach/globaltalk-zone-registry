@@ -7,7 +7,7 @@ module DDNS
   TestNet3 = IPAddr.new("203.0.113.0/24")
   Benchmarking = IPAddr.new("198.18.0.0/15")
   Multicast = IPAddr.new("224.0.0.0/4")
-  BCAST = IPAddr.new("255.255.255.255")
+  Broadcast = IPAddr.new("255.255.255.255")
 
   Error = Class.new(StandardError)
   NotAllowedError = Class.new(Error)
@@ -50,20 +50,20 @@ module DDNS
   def ip_from(ip)
     case ip
     in String => str
-      IPAddr.new(ip)
+      IPAddr.new(str)
     in IPAddr => addr
       addr
     end
   end
 
   def valid_ip?(ip)
-    permit!(ip)
+    validate_ip(ip)
     true
   rescue NotAllowedError, IPAddr::InvalidAddressError
     false
   end
 
-  def permit!(ip)
+  def validate_ip!(ip)
     ip = ip_from(ip)
 
     # IPv6 will never work on classic Macs
@@ -92,12 +92,17 @@ module DDNS
         TestNet2.include?(ip) ||
         TestNet3.include?(ip) ||
         DSLite.include?(ip) ||
-        Multicast.include?(ip)
+        Multicast.include?(ip) ||
+        ip == Broadcast
       raise NotAllowedError.new("Not internet routable")
     end
 
-    if ip == BCAST
-      raise NotAllowedError.new("You must be joking")
+    if ip.to_i & 255 == 255
+      raise NotImplementedError.new("Likely network broadcast address")
+    end
+
+    if ip.to_i & 255 == 0
+      raise NotImplementedError("Likely network address")
     end
 
     ip

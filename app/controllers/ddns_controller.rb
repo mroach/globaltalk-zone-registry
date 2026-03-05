@@ -9,7 +9,7 @@ class DDNSController < ActionController::Base
     hostname = params.require("hostname")
     ddns_subdomain, _ = hostname.split(".", 2)
 
-    ip = DDNS.permit!(params.require("myip"))
+    ip = DDNS.validate_ip(params.require("myip"))
 
     zone = Zone.approved.find_by!(ddns_subdomain:)
 

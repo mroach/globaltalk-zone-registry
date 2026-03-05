@@ -4,12 +4,11 @@ class CreateZones < ActiveRecord::Migration[8.1]
       t.timestamps
 
       t.references :user, null: false, type: :uuid
-      t.citext :localtalk_zone_name, null: true
-      t.citext :ethertalk_zone_name, null: false
+      t.citext :name, null: false
+      t.string :physical_layer, null: false, default: "ethertalk"
       t.column :network_ranges, :int4range, array: true, null: false, default: []
-      t.text :highlights
-      t.text :comments
       t.text :public_endpoint, null: false
+      t.text :about
 
       t.timestamp :approved_at
       t.timestamp :disabled_at
@@ -20,8 +19,7 @@ class CreateZones < ActiveRecord::Migration[8.1]
       t.string :ddns_password_digest
 
       # Unique constraints
-      t.index :localtalk_zone_name, unique: true
-      t.index :ethertalk_zone_name, unique: true
+      t.index [:physical_layer, :name], unique: true
       t.index :ddns_subdomain, unique: true
 
       # Common filtering/sorting

@@ -1,47 +1,35 @@
 <%= link_to("Edit", edit_zone_path(@zone)) %>
 
+<h1><%= @zone.name %></h1>
 
 <div>
+  <h3>Details</h3>
   <dl>
     <dt>Owner</dt>
-    <dt><%= @zone.user.email_address %></dt>
-  </dl>
-  <dl>
-    <dt><%= Zone.human_attribute_name(:ethertalk_zone_name) %></dt>
-    <dt><%= @zone.ethertalk_zone_name %></dt>
-  </dl>
+    <dd><%= @zone.user.name %></dd>
 
-  <dl>
-    <dt><%= Zone.human_attribute_name(:localtalk_zone_name) %></dt>
-    <dt><%= @zone.localtalk_zone_name %></dt>
-  </dl>
-
-  <dl>
     <dt><%= Zone.human_attribute_name(:public_endpoint) %></dt>
-    <dt><%= @zone.public_endpoint %></dt>
-  </dl>
+    <dd><%= @zone.public_endpoint %></dd>
 
-  <dl>
+    <dt><%= Zone.human_attribute_name(:physical_layer) %></dt>
+    <dd><%= Zone::PhysicalLayer.label_for(@zone.physical_layer) %></dd>
+
     <dt><%= Zone.human_attribute_name(:network_ranges) %></dt>
-    <dt><%= @zone.network_ranges_s %></dt>
+    <dd><%= @zone.network_ranges_s %></dd>
+
+    <dt><%= Zone.human_attribute_name(:about) %></dt>
+    <dd><%= @zone.about %></dd>
   </dl>
 
-  <dl>
-    <dt><%= Zone.human_attribute_name(:highlights) %></dt>
-    <dt><%= @zone.highlights %></dt>
-  </dl>
-
-  <dl>
-    <dt><%= Zone.human_attribute_name(:comments) %></dt>
-    <dt><%= @zone.comments %></dt>
-  </dl>
-
+  <h3>DDNS</h3>
   <dl>
     <dt><%= Zone.human_attribute_name(:ddns_subdomain) %></dt>
-    <dt><%= @zone.ddns_subdomain %></dt>
-  </dl>
-  <dl>
+    <dd><%= @zone.ddns_subdomain %></dd>
+
     <dt><%= Zone.human_attribute_name(:ddns_ip) %></dt>
-    <dt><%= @zone.ddns_ip %></dt>
+    <dd><%= @zone.ddns_ip %></dd>
+
+    <dt><%= Zone.human_attribute_name(:ddns_ip) %></dt>
+    <dd><%= @zone.ddns_ip %></dd>
   </dl>
 </div>

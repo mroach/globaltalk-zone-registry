@@ -1,6 +1,8 @@
 class ZonesController < ApplicationController
+  before_action :load_options, only: [:new, :edit, :create, :update]
+
   def index
-    @zones = Zone.includes(:user).order(:ethertalk_zone_name)
+    @zones = Zone.includes(:user).order(:name)
   end
 
   def show
@@ -40,13 +42,19 @@ class ZonesController < ApplicationController
 
   def permitted_params
     params.require(:zone).permit(
-      :localtalk_zone_name,
-      :ethertalk_zone_name,
+      :name,
       :public_endpoint,
       :ddns_subdomain,
-      :highlights,
-      :comments,
-      :disabled_at
+      :about,
+      :disabled_at,
+      :network_ranges,
+      :physical_layer
     )
+  end
+
+  def load_options
+    @options = {
+      physical_layer: Zone::PhysicalLayer.to_options
+    }
   end
 end
