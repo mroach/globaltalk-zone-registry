@@ -18,6 +18,11 @@ services:
       start_period: 5s
       timeout: 5s
 
+  smtp:
+    image: rnwood/smtp4dev:v3
+    ports:
+      - 2509:80
+
   app:
     build:
       context: "."
@@ -31,6 +36,7 @@ services:
       - DB_NAME=globaltalk
       - DB_PASSWORD=globaltalk
       - DB_USERNAME=globaltalk
+      - SMTP_SERVER=smtp
     ports:
       - ${PORT:-5009}:3000
     volumes:
@@ -40,6 +46,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      smtp:
+        condition: service_started
 
 volumes:
   app_tmp:
