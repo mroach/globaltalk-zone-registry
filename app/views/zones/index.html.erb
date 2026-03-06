@@ -1,27 +1,29 @@
 <%= content_for(:title, "Zones") %>
 
-<%= link_to("New", new_zone_path) %>
+<h1>Zones</h1>
+
+<%= button_to("New", new_zone_path, method: :get) %>
 
 <table>
   <thead>
     <tr>
       <th>Name</th>
+      <th>Owner</th>
       <th>Endpoint</th>
       <th>Approved?</th>
       <th>Enabled?</th>
       <th>Network Numbers</th>
-      <th>Time Zone</th>
     </tr>
   </thead>
   <tbody>
     <% @zones.each do |zone| %>
       <tr>
         <td><%= link_to(zone.name, zone) %></td>
+        <td><%= zone.user.name %></td>
         <td><%= zone.public_endpoint %></td>
         <td><%= zone.approved? %></td>
         <td><%= zone.enabled? %></td>
         <td><%= zone.network_ranges_s %></td>
-        <td><%= zone.user.time_zone %></td>
       </tr>
     <% end %>
   </tbody>

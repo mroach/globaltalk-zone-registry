@@ -17,6 +17,9 @@ gem "jbuilder"
 
 gem "bcrypt", "~> 3.1.7"
 
+# Defining authorisations in code
+gem "action_policy"
+
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
 gem "solid_cache"
 gem "solid_queue"
@@ -27,6 +30,8 @@ gem "bootsnap", require: false
 
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 gem "thruster", require: false
+
+gem "redcarpet"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

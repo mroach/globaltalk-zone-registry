@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    action_policy (0.7.6)
+      ruby-next-core (>= 1.0)
     action_text-trix (2.1.16)
       railties
     actioncable (8.1.2)
@@ -265,6 +267,7 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
+    redcarpet (3.6.1)
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
@@ -287,6 +290,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.47.1, < 2.0)
+    ruby-next-core (1.2.0)
     ruby-progressbar (1.13.0)
     rubyzip (3.2.2)
     securerandom (0.4.1)
@@ -370,6 +374,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  action_policy
   bcrypt (~> 3.1.7)
   bootsnap
   bundler-audit
@@ -382,6 +387,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails (~> 8.1.1)
+  redcarpet
   selenium-webdriver
   solid_cable
   solid_cache

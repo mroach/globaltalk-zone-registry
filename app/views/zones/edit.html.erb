@@ -1,2 +1,3 @@
-<%= link_to(@zone.name, @zone) %>
+<h1>Editing <%= link_to(@zone.name, @zone) %></h1>
+<div><%= @zone.errors.messages %></div>
 <%= render partial: "form" %>

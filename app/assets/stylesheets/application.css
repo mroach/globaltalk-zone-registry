@@ -1,10 +1,103 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+*:not(dialog) {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+
+body {
+  font-family: sans-serif;
+  line-height: 1.5;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+/* End Reset */
+
+:root {
+  --macos9-bg-color: #63639c;
+  --macos9-gray1: #dddddd;
+  --macos9-gray2: #c0c0c0;
+}
+
+code {
+  font-family: monospace;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+dl > dt { font-weight: 500 }
+
+.markdown > p:first-child { margin: 0 }
+
+.flash-message.flash-notice { color: green }
+.flash-message.flash-alert { color: red }
+
+body {
+  background-color: #cfcfe1;
+}
+
+body > nav {
+  margin: 0 0 10px 0;
+  background-color: var(--macos9-bg-color);
+  border-bottom: solid 4px black;
+}
+
+nav > ul {
+  margin: 0;
+  padding: 6px;
+  list-style-type: none;
+}
+nav > ul > li {
+  display: inline-block;
+}
+nav > ul > li > a {
+  display: inline-block;
+  border: solid 1px dimgray;
+  padding: 0.2em 1em;
+  margin: 0;
+  background-color: var(--macos9-gray1);
+  text-decoration: none;
+}
+nav > ul > li > a:hover {
+  background-color: var(--macos9-gray2);
+}
+
+body > main {
+  max-width: 1200px;
+}
+
+/* This is a crime. Refactor this */
+form > div {
+  margin: 1em 0;
+}
+form > div {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+form > div label { font-weight: 500 }

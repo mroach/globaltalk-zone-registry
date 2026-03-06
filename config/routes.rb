@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "healthz" => "rails/health#show", :as => :rails_health_check
 
-  get "/pub/exports/endpoints.txt", to: "exports#endpoints"
+  get "/pub/exports/endpoints.txt", to: "exports#endpoints", as: :endpoints_export
 
   # DynDNS2 protocol https://help.dyn.com/perform-update.html
   get "/nic/update", to: "ddns#update", as: :ddns_update
@@ -15,7 +15,13 @@ Rails.application.routes.draw do
   resources :signups, only: [:new, :create], param: :token do
     get :confirm, on: :member
   end
-  resources :zones
+
+  resources :zones do
+    patch :approve, on: :member
+    patch :unapprove, on: :member
+    patch :disable, on: :member
+    patch :enable, on: :member
+  end
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest

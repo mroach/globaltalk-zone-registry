@@ -4,9 +4,9 @@ class ExportsController < ApplicationController
   def endpoints
     endpoints = Zone
       .exportable
-      .order(:id)
       .select(:static_endpoint, :ddns_subdomain)
       .map(&:public_endpoint)
+      .sort
 
     render(plain: endpoints.join("\n") + "\n")
   end

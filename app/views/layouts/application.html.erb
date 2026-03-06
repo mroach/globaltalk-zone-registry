@@ -24,6 +24,20 @@
   </head>
 
   <body>
-    <%= yield %>
+    <nav>
+      <ul>
+        <li><%= link_to("Zones", zones_path) %></li>
+        <li><%= link_to("endpoints.txt", endpoints_export_path) %></li>
+      </ul>
+    </nav>
+    <main>
+      <%# These don't belong here. Temporary (so, probably permanent) %>
+      <div class="flash-messages">
+        <% flash.each do |k, txt| %>
+          <%= tag.div(txt, class: ["flash-message", "flash-#{k}"]) %>
+        <% end %>
+      </div>
+      <%= yield %>
+    </main>
   </body>
 </html>

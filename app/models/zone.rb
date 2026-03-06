@@ -22,6 +22,34 @@ class Zone < ApplicationRecord
         []
       end
     end
+
+    def random_free_network_number
+      connection.select_value(<<~SQL)
+        WITH params AS (
+           SELECT (1 + (random() * 65533)::int) AS start_at
+        ),
+        candidates AS (
+           SELECT s.n
+           FROM params, generate_series(params.start_at, 65534) AS s(n)
+           WHERE NOT EXISTS (
+             SELECT 1
+             FROM zones, unnest(network_ranges) AS r
+             WHERE r @> s.n
+           )
+           UNION ALL
+           SELECT s.n
+           FROM params, generate_series(1, params.start_at - 1) AS s(n)
+           WHERE NOT EXISTS (
+             SELECT 1
+             FROM zones, unnest(network_ranges) AS r
+             WHERE r @> s.n
+           )
+        )
+        SELECT n
+        FROM candidates
+        LIMIT 1;
+      SQL
+    end
   end
 
   belongs_to :user
@@ -43,7 +71,7 @@ class Zone < ApplicationRecord
   # TODO: validate no self-overlap (e.g 1-100, 90-220) (or just normalize them?)
 
   scope :approved, -> { where.not(approved_at: nil) }
-  scope :enabled, -> { where.not(disabled_at: nil) }
+  scope :enabled, -> { where(disabled_at: nil) }
   scope :exportable, -> { approved.enabled }
 
   # Find zones where one or more of their network ranges overlap with the given range

@@ -18,8 +18,8 @@ Zone.find_or_create_by!(name: "SuperZone") do
   it.assign_attributes(
     user: user1,
     network_ranges: 1440,
-    description: "Lots of Windows machines",
-    public_endpoint: "air.user1.example.com",
+    about: "Lots of Windows machines",
+    static_endpoint: "air.user1.example.com",
     approved_at: 1.minute.ago
   )
 end
@@ -34,10 +34,10 @@ Zone.find_or_create_by!(name: "Turtles") do
   it.assign_attributes(
     user: user2,
     network_ranges: 2940,
-    description: "Lots of printers. You can *never* have too many.",
-    public_endpoint: "24.34.153.229",
-    approved_at: 1.minute.ago,
-    ddns_subdomain: "baronet"
+    about: "Lots of printers. You can *never* have too many.",
+    ddns_subdomain: "turtles",
+    ddns_ip: "24.34.153.229",
+    approved_at: 1.minute.ago
   )
 end
 
@@ -50,8 +50,8 @@ Zone.find_or_create_by!(name: "Dunnynet") do
   it.assign_attributes(
     user: user3,
     network_ranges: 19680,
-    description: "Linux!",
-    public_endpoint: "straya.example.com",
+    about: "Linux!",
+    static_endpoint: "dunnynet.example.com",
     approved_at: 1.minute.ago
   )
 end
