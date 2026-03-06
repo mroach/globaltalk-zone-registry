@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get "/pub/exports/endpoints.txt", to: "exports#endpoints"
 
   # DynDNS2 protocol https://help.dyn.com/perform-update.html
-  get "/nic/update", to: "ddns#update"
+  get "/nic/update", to: "ddns#update", as: :ddns_update
 
   resources :signups, only: [:new, :create], param: :token do
     get :confirm, on: :member

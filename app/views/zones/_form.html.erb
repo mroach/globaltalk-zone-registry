@@ -1,5 +1,6 @@
 <div><%= @zone.errors.messages %></div>
 <%= form_with(model: @zone) do |form| %>
+  <h2>Basics</h2>
   <div>
     <%= form.label(:name) %>
     <%= form.text_field(:name) %>
@@ -15,15 +16,30 @@
   </div>
   <div>
     <%= form.label(:about) %>
-    <%= form.text_area(:about) %>
+    <%= form.text_area(:about, placeholder: "What should users look for in your zone?") %>
   </div>
 
+  <h2>Endpoint</h2>
+
+  <p>
+    Your AppleTalk router must be reachable by the public internet on port 387.
+    If you have a static IPv4 address or a hostname managed with dynamic DNS,
+    enter that as the <em>Public Static Endpoint</em>.
+  </p>
+  <p>
+    If you have a public IPv4 address that's dynamic, you can use this application
+    as your dynamic DNS provider and you'll get a hostname like <em>my-zone.<%= DDNS.domain_name %></em> that other GlobalTalk users will connect to.
+  </p>
+  <p>
+    If you're stuck behind CG-NAT, then you can't get setup on GlobalTalk quite yet.
+    You'll have to find a workaround like routing through a hosted VM with a public IP.
+  </p>
 
   <fieldset>
     <legend>Public Static Endpoint</legend>
     <div>
-      <%= form.label(:public_endpoint) %>
-      <%= form.text_field(:public_endpoint, placeholder: "IPv4 address or hostname") %>
+      <%= form.label(:static_endpoint) %>
+      <%= form.text_field(:static_endpoint, placeholder: "Static IPv4 address or hostname") %>
     </div>
   </fieldset>
 
@@ -31,11 +47,7 @@
     <legend>Dynamic DNS</legend>
     <div>
       <%= form.label(:ddns_subdomain) %>
-      <%= form.text_field(:ddns_subdomain, readonly: true) %>
-    </div>
-    <div>
-      <%= form.label(:ddns_ip) %>
-      <%= form.text_field(:ddns_ip, readonly: true) %>
+      <%= form.text_field(:ddns_subdomain, readonly: @zone.persisted?, placeholder: "Leave blank to auto-generate") %>
     </div>
   </fieldset>
 

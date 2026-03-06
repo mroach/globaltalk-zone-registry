@@ -18,7 +18,7 @@ class Zone < ApplicationRecord
         parse_network_ranges(Range.new(m[1].to_i, m[2].to_i))
       in Array => arr
         arr.flat_map { parse_network_ranges(it) }
-      in nil
+      in nil | ""
         []
       end
     end
@@ -26,16 +26,16 @@ class Zone < ApplicationRecord
 
   belongs_to :user
 
-  has_secure_password :ddns_password, validations: false
+  encrypts :ddns_password
 
   string_enum :physical_layer, ["ethertalk", "localtalk", "tokentalk", "fdditalk"]
 
-  normalizes :name, with: ->(s) { s.strip }
-  normalizes :ddns_subdomain, with: ->(s) { s.strip.downcase }
+  normalizes :name, with: ->(s) { s.strip.presence }
+  normalizes :ddns_subdomain, with: ->(s) { s.strip.presence&.parameterize }
   normalizes :network_ranges, with: ->(list) { list.sort_by(&:begin) }
 
   validates :name, presence: true, uniqueness: {scope: :physical_layer}
-  validates :public_endpoint, presence: true, uniqueness: true, public_endpoint: true
+  validates :static_endpoint, public_endpoint: true, allow_nil: true
   validates :ddns_subdomain, :allow_nil => true, "ddns/subdomain" => true
 
   # TODO: validate network range values (between 0 and 65535)
@@ -52,9 +52,32 @@ class Zone < ApplicationRecord
     where("'[?,?]'::int4range && ANY(network_ranges)", range.begin, range.end)
   }
 
+  # Set a sane default for the DDNS subdomain name based on the zone name
+  before_validation do
+    self.ddns_subdomain ||= if (hostname = name&.parameterize)
+      if (conflicts = Zone.where(ddns_subdomain: hostname).count).positive?
+        format("%s-%d", hostname, conflicts + 1)
+      else
+        hostname
+      end
+    end
+  end
+
+  before_create do
+    self.ddns_password = Passphrase.generate
+  end
+
   def approved? = approved_at.present?
   def disabled? = disabled_at.present?
   def enabled? = !disabled?
+
+  def public_endpoint
+    static_endpoint || ddns_fqdn
+  end
+
+  def ddns_fqdn
+    DDNS.fqdn_for(ddns_subdomain)
+  end
 
   # Get the list of network ranges in a human-readable list.
   def network_ranges_s

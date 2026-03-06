@@ -6,8 +6,6 @@ Rails.application.configure do
   # Make code changes take effect immediately without server restart.
   config.enable_reloading = true
 
-  config.hotwire_livereload.listen_paths << Rails.root.join("app/assets/builds")
-
   # Do not eager load code on boot.
   config.eager_load = false
 

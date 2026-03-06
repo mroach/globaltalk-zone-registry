@@ -15,7 +15,7 @@ class SignupsController < ApplicationController
       :socials,
       :location,
       :time_zone
-    ))
+    ).to_h.transform_values(&:presence))
 
     if @user.save
       SignupsMailer.confirmation(@user).deliver_later

@@ -43,13 +43,13 @@ class ZonesController < ApplicationController
   def permitted_params
     params.require(:zone).permit(
       :name,
-      :public_endpoint,
+      :static_endpoint,
       :ddns_subdomain,
       :about,
       :disabled_at,
       :network_ranges,
       :physical_layer
-    )
+    ).to_h.transform_values(&:presence)
   end
 
   def load_options

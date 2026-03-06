@@ -17,12 +17,27 @@ module DDNS
 
   extend self
 
-  def domain_name
-    ENV.fetch("DDNS_DOMAIN_NAME", "ddns.globaltalk.zone")
+  # Update the IP address for the given hostname in the nameserver for the DDNS domain
+  #
+  # @return [Boolean] Success
+  def update_a_record(hostname, ip)
+    unless valid_name_part?(hostname)
+      raise ArgumentError, "invalid hostname"
+    end
+
+    NSUpdate.new(domain_name, server: AppConfig.ddns_nameserver)
+      .with_tsig_keyfile(AppConfig.ddns_tsig_keyfile_path!)
+      .with_commands(send: true) do |c|
+        c.set_a(hostname, ip)
+      end
   end
 
-  def make_fqdn(subdomain)
-    "#{subdomain}.#{domain_name}"
+  def fqdn_for(hostname)
+    format("%s.%s", hostname, domain_name)
+  end
+
+  def domain_name
+    AppConfig.ddns_domain_name!
   end
 
   # Validates if the input is a valid *part* of a FQDN.
@@ -47,15 +62,6 @@ module DDNS
     parts.count > 1 && parts.all? { valid_name_part?(it) }
   end
 
-  def ip_from(ip)
-    case ip
-    in String => str
-      IPAddr.new(str)
-    in IPAddr => addr
-      addr
-    end
-  end
-
   def valid_ip?(ip)
     validate_ip(ip)
     true
@@ -64,7 +70,12 @@ module DDNS
   end
 
   def validate_ip!(ip)
-    ip = ip_from(ip)
+    ip = case ip
+    in IPAddr => obj
+      obj
+    in String => str
+      IPAddr.new(str)
+    end
 
     # IPv6 will never work on classic Macs
     unless ip.ipv4?

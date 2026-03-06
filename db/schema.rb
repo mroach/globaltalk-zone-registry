@@ -43,14 +43,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_223512) do
     t.datetime "approved_at", precision: nil
     t.datetime "created_at", null: false
     t.inet "ddns_ip"
-    t.string "ddns_password_digest"
+    t.string "ddns_password"
     t.citext "ddns_subdomain"
     t.datetime "disabled_at", precision: nil
     t.datetime "last_verified_at", precision: nil
     t.citext "name", null: false
     t.int4range "network_ranges", default: [], null: false, array: true
     t.string "physical_layer", default: "ethertalk", null: false
-    t.text "public_endpoint", null: false
+    t.string "static_endpoint"
     t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
     t.index ["approved_at"], name: "index_zones_on_approved_at"

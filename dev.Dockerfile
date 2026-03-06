@@ -10,6 +10,6 @@ RUN apt-get update -qq && \
       postgresql-common
 
 RUN /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
-    apt-get install --no-install-recommends -y postgresql-client-18
+    apt-get install --no-install-recommends -y postgresql-client-18 bind9-dnsutils
 
 WORKDIR /opt/app

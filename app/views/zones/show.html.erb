@@ -10,9 +10,6 @@
     <dt>Owner</dt>
     <dd><%= @zone.user.name %></dd>
 
-    <dt><%= Zone.human_attribute_name(:public_endpoint) %></dt>
-    <dd><%= @zone.public_endpoint %></dd>
-
     <dt><%= Zone.human_attribute_name(:physical_layer) %></dt>
     <dd><%= Zone::PhysicalLayer.label_for(@zone.physical_layer) %></dd>
 
@@ -23,15 +20,39 @@
     <dd><%= @zone.about %></dd>
   </dl>
 
-  <h3>DDNS</h3>
+  <h3>Endpoint</h3>
   <dl>
-    <dt><%= Zone.human_attribute_name(:ddns_subdomain) %></dt>
-    <dd><%= @zone.ddns_subdomain %></dd>
+    <dt><%= Zone.human_attribute_name(:static_endpoint) %></dt>
+    <dd><%= @zone.static_endpoint %></dd>
 
-    <dt><%= Zone.human_attribute_name(:ddns_ip) %></dt>
-    <dd><%= @zone.ddns_ip %></dd>
+    <dt>Current public endpoint</dt>
+    <dd><%= @zone.public_endpoint %></dd>
+  </dl>
 
-    <dt><%= Zone.human_attribute_name(:ddns_ip) %></dt>
+  <h3>DDNS</h3>
+  <p>
+    Our service follows the DynDNS2 protocol convention. Most any router will
+    have this convention baked-in and give you the option to customise the
+    update URL.
+  </p>
+
+  <dl>
+    <dt>Hostname</dt>
+    <dd><%= @zone.ddns_fqdn %></dd>
+
+    <dt>Update URL</dt>
+    <dd><%= ddns_update_url %></dd>
+
+    <dt>Username</dt>
+    <dd><em>Ignored by us. Set to any value e.g. <code>ddns</code></em></dd>
+
+    <dt>Password</dt>
+    <dd><%= @zone.ddns_password %></dd>
+
+    <dt>Last IP</dt>
     <dd><%= @zone.ddns_ip %></dd>
   </dl>
+
+  <p>An example with cURL using your configuration would be:</p>
+  <pre>curl -u ddns:<%= @zone.ddns_password %> '<%= ddns_update_url(myip: request.remote_ip, hostname: @zone.ddns_fqdn) %>'</pre>
 </div>

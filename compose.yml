@@ -32,11 +32,16 @@ services:
     command: ["bin/dev"]
     environment:
       - BINDING=0.0.0.0
-      - DB_HOST=db
-      - DB_NAME=globaltalk
-      - DB_PASSWORD=globaltalk
-      - DB_USERNAME=globaltalk
+      - DATABASE_HOST=db
+      - DATABASE_NAME=globaltalk
+      - DATABASE_PASSWORD=globaltalk
+      - DATABASE_USERNAME=globaltalk
+      - ENCRYPTION_DETERMINISTIC_KEY=utPgIi0VyKKTSbsLDUgCf5FEYaaZ5oFOo3VIGiRP61D6HcmJ
+      - ENCRYPTION_KEY_DERIVATION_SALT=aTt1OMGrYJsLy81DHnU6jWkaiwfWB021mCc8ykZORFhswEio
+      - ENCRYPTION_PRIMARY_KEY=XW4PCqn8xLOv533KLG2rvL4wwsctKUTsQGLsFKK3eZwqZubX
       - SMTP_SERVER=smtp
+    env_file:
+      - .private.env
     ports:
       - ${PORT:-5009}:3000
     volumes:

@@ -33,3 +33,8 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# Local development secrets and config
+.private.env
+
+# Runtime config files, likely mounted
+/run/config

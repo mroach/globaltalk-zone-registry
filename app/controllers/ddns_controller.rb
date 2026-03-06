@@ -9,11 +9,11 @@ class DDNSController < ActionController::Base
     hostname = params.require("hostname")
     ddns_subdomain, _ = hostname.split(".", 2)
 
-    ip = DDNS.validate_ip(params.require("myip"))
+    ip = DDNS.validate_ip!(params.require("myip"))
 
-    zone = Zone.approved.find_by!(ddns_subdomain:)
+    zone = Zone.find_by!(ddns_subdomain:)
 
-    unless authenticate_with_http_basic { |_u, pass| zone.authenticate_ddns_password(pass) }
+    unless authenticate_with_http_basic { |_u, pass| zone.ddns_password == pass }
       return request_http_basic_authentication
     end
 
@@ -22,6 +22,8 @@ class DDNSController < ActionController::Base
     end
 
     if zone.update(ddns_ip: ip)
+      DDNS::UpdateHostnameJob.perform_later(zone.id)
+
       render(plain: "good")
     else
       render(plain: "dnserr", status: 500)
