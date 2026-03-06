@@ -36,6 +36,8 @@ group :development, :test do
   gem "bundler-audit", require: false
 
   gem "standard", require: false
+
+  gem "hotwire-livereload", "~> 2.1"
 end
 
 group :development do

@@ -1,5 +1,7 @@
 <%= link_to("Edit", edit_zone_path(@zone)) %>
 
+<%= content_for(:title, @zone.name) %>
+
 <h1><%= @zone.name %></h1>
 
 <div>
