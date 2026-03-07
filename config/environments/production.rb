@@ -30,14 +30,14 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
+  if (key = AppConfig.rails_secret_key_base)
+    config.secret_key_base = key
+  end
+
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
   # Change to "debug" to log everything (including potentially personally-identifiable information!).
-  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
-
-  # Prevent health checks from clogging up the logs.
-  config.silence_healthcheck_path = "/up"
 
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
@@ -53,7 +53,6 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = {host: "example.com"}
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
   # config.action_mailer.smtp_settings = {

@@ -1,5 +1,3 @@
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
-<%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
 <%= @user.errors.messages %>
 
 <%= form_with(model: @user, url: signups_path, method: :post) do |form| %>
@@ -8,16 +6,6 @@
   <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Enter your password", maxlength: 72 %><br>
   <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Confirm your password", maxlength: 72 %><br>
   <%= form.text_field :location, required: false, autofocus: true, placeholder: "City and/or country" %><br>
-  <%= form.select :time_zone, @options.fetch(:time_zones), selected: @user.time_zone %><br>
+  <%= form.select :time_zone, @options.fetch(:time_zones), { selected: @user.time_zone }, {data: { controller: "time-zone", "time-zone-target" => "picker" } }%><br>
   <%= form.submit "Sign up" %>
 <% end %>
-<br>
-
-<script type="text/javascript">
-  window.addEventListener("load", (_event) => {
-    if ('Temporal' in window) {
-      const userTz = Temporal.Now.timeZoneId();
-      document.getElementById('user_time_zone').value = userTz;
-    }
-  });
-</script>

@@ -1,7 +1,13 @@
 class ExportsController < ApplicationController
-  allow_unauthenticated_access
+  allow_unauthenticated_access only: [:endpoints]
+
+  def index
+    authorize!(with: ExportPolicy)
+  end
 
   def endpoints
+    skip_verify_authorized!
+
     endpoints = Zone
       .exportable
       .select(:static_endpoint, :ddns_subdomain)

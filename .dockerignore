@@ -3,6 +3,7 @@
 # Ignore git directory.
 /.git/
 /.gitignore
+/.ruby-lsp
 
 # Ignore bundler config.
 /.bundle
@@ -23,6 +24,9 @@
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/.keep
+
+/run/config/*
+!/run/config/.keep
 
 # Ignore storage (uploaded files in development and any SQLite databases).
 /storage/*
@@ -45,3 +49,7 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
+
+/.editorconfig
+/.private.env
+/dev.Dockerfile

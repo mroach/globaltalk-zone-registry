@@ -39,6 +39,7 @@ services:
       - ENCRYPTION_DETERMINISTIC_KEY=utPgIi0VyKKTSbsLDUgCf5FEYaaZ5oFOo3VIGiRP61D6HcmJ
       - ENCRYPTION_KEY_DERIVATION_SALT=aTt1OMGrYJsLy81DHnU6jWkaiwfWB021mCc8ykZORFhswEio
       - ENCRYPTION_PRIMARY_KEY=XW4PCqn8xLOv533KLG2rvL4wwsctKUTsQGLsFKK3eZwqZubX
+      - PUBLIC_URL=http://localhost:5009
       - SMTP_SERVER=smtp
     env_file:
       - .private.env

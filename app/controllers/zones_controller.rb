@@ -3,34 +3,37 @@ class ZonesController < ApplicationController
   before_action :load_options, only: [:new, :edit, :create, :update]
 
   def index
+    authorize!
     @zones = Zone.includes(:user).order(:name)
   end
 
   def show
+    authorize!(@zone)
   end
 
   def edit
+    authorize!(@zone)
   end
 
   def new
+    authorize!
     @zone = Zone.new
   end
 
   def create
+    authorize!
     @zone = Zone.new(permitted_params)
     @zone.user = Current.user
-
-    puts "COOL. NEW ZON HERE"
 
     if @zone.save
       redirect_to(@zone)
     else
-      puts "OH FUCK IT FAILED #{@zone.errors.messages}"
       render(:new, status: :unprocessable_content)
     end
   end
 
   def update
+    authorize!(@zone)
     if @zone.update(permitted_params)
       redirect_to(@zone)
     else
@@ -39,22 +42,25 @@ class ZonesController < ApplicationController
   end
 
   def approve
-    if @zone.update(approved_at: Time.now)
+    authorize!(@zone)
+    if @zone.update(approved_at: Time.now, rejected_at: nil)
       redirect_to(@zone, notice: "Approved!")
     else
       redirect_to(@zone, alert: "Approval failed")
     end
   end
 
-  def unapprove
-    if @zone.update(approved_at: nil)
-      redirect_to(@zone, notice: "Approval revoked")
+  def reject
+    authorize!(@zone)
+    if @zone.update(rejected_at: Time.now, approved_at: nil)
+      redirect_to(@zone, notice: "Rejected!")
     else
-      redirect_to(@zone, alert: "Unapproval failed")
+      redirect_to(@zone, alert: "Rejection failed #{@zone.errors.messages}")
     end
   end
 
   def disable
+    authorize!(@zone)
     if @zone.update(disabled_at: Time.now)
       redirect_to(@zone, notice: "Disabled")
     else
@@ -63,6 +69,7 @@ class ZonesController < ApplicationController
   end
 
   def enable
+    authorize!(@zone)
     if @zone.update(disabled_at: nil)
       redirect_to(@zone, notice: "Enabled")
     else
@@ -80,7 +87,6 @@ class ZonesController < ApplicationController
     params.require(:zone).permit(
       :name,
       :static_endpoint,
-      :ddns_subdomain,
       :about,
       :network_ranges,
       :physical_layer

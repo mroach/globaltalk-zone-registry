@@ -2,6 +2,14 @@ class SignupsController < ApplicationController
   allow_unauthenticated_access
   before_action :load_options
 
+  # Prevent signed-in users from using this page
+  before_action do
+    unless resume_session.nil?
+      redirect_to(root_path)
+    end
+  end
+  skip_verify_authorized
+
   def new
     @user = User.new
   end

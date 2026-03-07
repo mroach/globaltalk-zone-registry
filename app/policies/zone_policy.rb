@@ -1,5 +1,13 @@
 class ZonePolicy < ApplicationPolicy
+  def index?
+    true
+  end
+
   def show?
+    true
+  end
+
+  def new?
     true
   end
 
@@ -17,8 +25,8 @@ class ZonePolicy < ApplicationPolicy
     user.admin? && !record.approved?
   end
 
-  def unapprove?
-    user.admin? && record.approved?
+  def reject?
+    user.admin? && !record.rejected?
   end
 
   def enable?

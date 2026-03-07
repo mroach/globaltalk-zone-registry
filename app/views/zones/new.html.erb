@@ -1,3 +1,5 @@
 <h1>Register a Zone</h1>
-<div><%= @zone.errors.messages %></div>
+<% if @zone.errors.any? %>
+  <div><%= @zone.errors.messages %></div>
+<% end %>
 <%= render partial: "form" %>

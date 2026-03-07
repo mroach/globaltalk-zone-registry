@@ -17,7 +17,7 @@ module AppConfig
       in :integer
         parse_integer(value)
       in :set
-        parse_array(value, options).fmap(&:to_set)
+        parse_array(value, options).to_set
       in :string
         value.strip
       in :symbol

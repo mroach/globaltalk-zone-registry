@@ -1,0 +1,20 @@
+<h1>Router Configuration</h1>
+
+<%=
+  render_markdown(<<~MD)
+    To connect to GlobalTalk, you need a router to tunnel AppleTalk traffic
+    across the internet. Your AppleTalk router (distinct from your normal internet router)
+    needs to know a list of other routers to connect to.
+
+    [AIRConfig] and [jrouter] both support loading a list of AppleTalk router
+    endpoints from a text file.
+
+    [AIRConfig]: https://github.com/kalleboo/AIRConfig
+    [jrouter]: https://gitea.drjosh.dev/josh/jrouter
+
+    You can use this URL in either application to get a list of zone endpoints that
+    are approved and configured.
+
+    <code>#{link_to(endpoints_export_url, endpoints_export_url)}</code>
+  MD
+%>

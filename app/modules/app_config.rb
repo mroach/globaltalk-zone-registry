@@ -44,9 +44,17 @@ module AppConfig
     register :ddns_nameserver, :string
     register :ddns_tsig_keyfile_path, :string, -> { AppConfig.config_dir.join("ddns_tsig_keyfile") }
 
+    register :public_url, :uri
+
     register :rails_max_threads, :integer, 5
+    register :rails_log_level, :string, "info"
+    register :rails_secret_key_base, :string
 
     register :smtp_server, :string
+
+    register :trusted_proxies, :set, of: :ip
+
+    register :zone_max_allowed_network_count, :integer, 20
   end
 
   extend self

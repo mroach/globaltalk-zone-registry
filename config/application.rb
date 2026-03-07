@@ -21,17 +21,33 @@ module GlobalTalk
     # Log to STDOUT with the current request id as a default log tag.
     config.log_tags = [:request_id]
     config.logger = ActiveSupport::TaggedLogging.logger($stdout)
+    config.log_level = AppConfig.rails_log_level
 
-    config.active_record.encryption.primary_key = AppConfig.encryption_primary_key!
-    config.active_record.encryption.deterministic_key = AppConfig.encryption_deterministic_key!
-    config.active_record.encryption.key_derivation_salt = AppConfig.encryption_key_derivation_salt!
+    config.active_record.encryption.primary_key = AppConfig.encryption_primary_key
+    config.active_record.encryption.deterministic_key = AppConfig.encryption_deterministic_key
+    config.active_record.encryption.key_derivation_salt = AppConfig.encryption_key_derivation_salt
 
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: AppConfig.smtp_server
+    }
+
+    if (uri = AppConfig.public_url)
+      config.action_mailer.default_url_options = {
+        host: uri.host,
+        scheme: uri.scheme,
+        port: uri.port
+      }
+    end
+
+    config.silence_healthcheck_path = "/healthz"
+
+    config.active_storage.variant_processor = :disabled
+
+    # Add trusted proxies so `request.remote_addr` works properly
+    if (trusted_proxies = AppConfig.trusted_proxies)&.any?
+      config.action_dispatch.trusted_proxies =
+        (ActionDispatch::RemoteIp::TRUSTED_PROXIES.to_set + trusted_proxies).to_a
+    end
   end
 end

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Global Talk" %></title>
+    <title><%= [content_for(:title), "GlobalTalk Registry"].compact.join(" - ") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Global Talk">
@@ -27,7 +27,12 @@
     <nav>
       <ul>
         <li><%= link_to("Zones", zones_path) %></li>
-        <li><%= link_to("endpoints.txt", endpoints_export_path) %></li>
+        <% if Current.user && allowed_to?(:index?, with: ExportPolicy) %>
+        <li><%= link_to("AppleTalk Router Config", exports_path) %></li>
+        <% end %>
+        <% if Current.user %>
+        <li><%= button_to("Sign Out", session_path, method: :delete) %></li>
+        <% end %>
       </ul>
     </nav>
     <main>

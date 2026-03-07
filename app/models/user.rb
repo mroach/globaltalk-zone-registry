@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                 :uuid             not null, primary key
+#  email_address      :string           not null
+#  email_confirmed_at :datetime
+#  location           :string
+#  name               :string           not null
+#  password_digest    :string           not null
+#  roles              :string           default([]), not null, is an Array
+#  socials            :string
+#  time_zone          :string           default("Etc/UTC"), not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_email_address  (email_address) UNIQUE
+#
 class User < ApplicationRecord
   Role = Enum.define_from_values("admin")
 
