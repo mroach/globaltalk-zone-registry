@@ -11,7 +11,6 @@ Rails.application.routes.draw do
 
   resources :exports, only: [:index]
 
-
   resources :signups, only: [:new, :create], param: :token do
     get :confirm, on: :member
   end
