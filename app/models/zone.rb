@@ -32,6 +32,8 @@
 #  ix_zones_network_ranges                 (network_ranges) USING gin
 #
 class Zone < ApplicationRecord
+  audited
+
   belongs_to :user
 
   encrypts :ddns_password
@@ -111,7 +113,6 @@ class Zone < ApplicationRecord
   def disabled? = disabled_at.present?
   def enabled? = !disabled?
   def exported? = approved? && enabled? && valid_endpoint?
-
 
   def approval_status
     return :approved if approved?

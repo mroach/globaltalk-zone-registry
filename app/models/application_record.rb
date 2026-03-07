@@ -1,4 +1,6 @@
 class ApplicationRecord < ActiveRecord::Base
+  include Auditing::Model
+
   primary_abstract_class
 
   class << self

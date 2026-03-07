@@ -21,6 +21,8 @@
 class User < ApplicationRecord
   Role = Enum.define_from_values("admin")
 
+  audited
+
   has_secure_password
   has_many :sessions, dependent: :destroy
 
