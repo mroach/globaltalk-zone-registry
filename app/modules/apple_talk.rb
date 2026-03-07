@@ -22,12 +22,17 @@ module AppleTalk
       [r]
     in Integer => i
       parse_network_ranges(Range.new(i, i))
-    in String => str if m = str.strip.match(/\A\d+\z/)          # 123
-      parse_network_ranges(m[0].to_i)
-    in String => str if str.match?(/[,\s]/)                     # 123, 45-67, 90
-      parse_network_ranges(str.split(/[,\s]+/).map(&:presence).compact)
-    in String => str if m = str.strip.match(/\A(\d+)-(\d+)\z/)  # 444-555
-      parse_network_ranges(Range.new(m[1].to_i, m[2].to_i))
+    in String => str
+      case str.gsub(/[^\d\-,]+/, "").presence
+      in nil
+        []
+      in s if m = s.match(/\A\d+\z/)          # 123
+        parse_network_ranges(m[0].to_i)
+      in s if s.match?(/[,\s]/)                     # 123, 45-67, 90
+        parse_network_ranges(s.split(/[,\s]+/).map(&:presence).compact)
+      in s if m = s.strip.match(/\A(\d+)-(\d+)\z/)  # 444-555
+        parse_network_ranges(Range.new(m[1].to_i, m[2].to_i))
+      end
     in Array => arr
       arr.flat_map { parse_network_ranges(it) }
     in nil | ""
