@@ -352,7 +352,6 @@ CREATE TABLE public.zones (
     updated_at timestamp(6) without time zone NOT NULL,
     user_id uuid NOT NULL,
     name public.citext NOT NULL,
-    physical_layer character varying DEFAULT 'ethertalk'::character varying NOT NULL,
     network_ranges int4range[] DEFAULT '{}'::int4range[] NOT NULL,
     static_endpoint character varying,
     about text,
@@ -493,13 +492,6 @@ CREATE INDEX index_zones_on_last_verified_at ON public.zones USING btree (last_v
 
 
 --
--- Name: index_zones_on_physical_layer_and_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_zones_on_physical_layer_and_name ON public.zones USING btree (physical_layer, name);
-
-
---
 -- Name: index_zones_on_rejected_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -563,6 +555,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260307223227'),
 ('20260307164351'),
 ('20260302223512'),
 ('20260302203052'),

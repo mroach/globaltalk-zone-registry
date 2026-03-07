@@ -13,7 +13,6 @@
 #  last_verified_at :datetime
 #  name             :citext           not null
 #  network_ranges   :int4range        default([]), not null, is an Array
-#  physical_layer   :string           default("ethertalk"), not null
 #  rejected_at      :datetime
 #  static_endpoint  :string
 #  created_at       :datetime         not null
@@ -22,14 +21,13 @@
 #
 # Indexes
 #
-#  index_zones_on_approved_at              (approved_at)
-#  index_zones_on_ddns_subdomain           (ddns_subdomain) UNIQUE
-#  index_zones_on_disabled_at              (disabled_at)
-#  index_zones_on_last_verified_at         (last_verified_at)
-#  index_zones_on_physical_layer_and_name  (physical_layer,name) UNIQUE
-#  index_zones_on_rejected_at              (rejected_at)
-#  index_zones_on_user_id                  (user_id)
-#  ix_zones_network_ranges                 (network_ranges) USING gin
+#  index_zones_on_approved_at       (approved_at)
+#  index_zones_on_ddns_subdomain    (ddns_subdomain) UNIQUE
+#  index_zones_on_disabled_at       (disabled_at)
+#  index_zones_on_last_verified_at  (last_verified_at)
+#  index_zones_on_rejected_at       (rejected_at)
+#  index_zones_on_user_id           (user_id)
+#  ix_zones_network_ranges          (network_ranges) USING gin
 #
 class Zone < ApplicationRecord
   audited
@@ -38,12 +36,10 @@ class Zone < ApplicationRecord
 
   encrypts :ddns_password
 
-  string_enum :physical_layer, AppleTalk::PhysicalLayer.members
-
   normalizes :name, with: ->(s) { s.strip.presence }
   normalizes :ddns_subdomain, with: ->(s) { s.strip.presence&.parameterize }
 
-  validates :name, presence: true, uniqueness: {scope: :physical_layer}
+  validates :name, presence: true
   validates :static_endpoint, public_endpoint: true, allow_nil: true
   validates :ddns_subdomain, :allow_nil => true, "ddns/subdomain" => true
 

@@ -21,9 +21,6 @@
       <dt>Location</dt>
       <dd><%= @zone.user.location %></dd>
 
-      <dt><%= Zone.human_attribute_name(:physical_layer) %></dt>
-      <dd><%= Zone::PhysicalLayer.label_for(@zone.physical_layer) %></dd>
-
       <dt><%= Zone.human_attribute_name(:network_ranges) %></dt>
       <dd><code><%= @zone.network_ranges_s %></code></dd>
 

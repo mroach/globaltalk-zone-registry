@@ -2,8 +2,6 @@ module AppleTalk
   # Maximum allowable network number by AppleTalk itself
   MAX_NETWORK_NUMBER = 65279
 
-  PhysicalLayer = Enum.define_from_values("ethertalk", "localtalk", "tokentalk", "fdditalk")
-
   extend self
 
   def max_network_number

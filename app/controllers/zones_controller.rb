@@ -88,14 +88,11 @@ class ZonesController < ApplicationController
       :name,
       :static_endpoint,
       :about,
-      :network_ranges,
-      :physical_layer
+      :network_ranges
     ).to_h.transform_values(&:presence)
   end
 
   def load_options
-    @options = {
-      physical_layer: Zone::PhysicalLayer.to_options
-    }
+    @options = {}
   end
 end

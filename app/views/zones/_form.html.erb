@@ -6,10 +6,6 @@
   </div>
 
   <div>
-    <%= form.label(:physical_layer) %>
-    <div><%= form.select(:physical_layer, @options.fetch(:physical_layer)) %></div>
-  </div>
-  <div>
     <%= form.label(:network_ranges) %>
     <div data-controller="edit-network-number">
       <%= form.text_field(:network_ranges, value: @zone.network_ranges_s, placeholder: "123, 400-402", required: true, data: { "edit-network-number-target" => "number" }) %>
