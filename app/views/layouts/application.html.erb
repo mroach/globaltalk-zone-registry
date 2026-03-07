@@ -11,14 +11,9 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
@@ -26,12 +21,14 @@
   <body>
     <nav>
       <ul>
-        <li><%= link_to("Zones", zones_path) %></li>
+        <li><%= link_to("Zones", zones_path, class: "btn") %></li>
+        <li><%= link_to("Users", users_path, class: "btn") %></li>
         <% if Current.user && allowed_to?(:index?, with: ExportPolicy) %>
-        <li><%= link_to("AppleTalk Router Config", exports_path) %></li>
+        <li><%= link_to("AppleTalk Router Config", exports_path, class: "btn") %></li>
         <% end %>
         <% if Current.user %>
         <li><%= button_to("Sign Out", session_path, method: :delete) %></li>
+        <li><%= link_to(Current.user.name, Current.user) %></li>
         <% end %>
       </ul>
     </nav>

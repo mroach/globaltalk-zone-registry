@@ -28,7 +28,7 @@ class SignupsController < ApplicationController
     if @user.save
       SignupsMailer.confirmation(@user).deliver_later
 
-      redirect_to(new_session_path, notice: "A confirmation email has been sent!")
+      redirect_to(new_session_path, notice: "A confirmation email has been sent! (Confirmation emails are a bit broken right now. You can just login anyway.)")
     else
       render(:new, alert: "Signup failed")
     end

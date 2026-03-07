@@ -15,7 +15,7 @@
     <h3>Details</h3>
     <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
       <dt>Owner</dt>
-      <dd><%= @zone.user.name %></dd>
+      <dd><%= link_to(@zone.user.name, @zone.user) %></dd>
       <dt>Time Zone</dt>
       <dd><%= @zone.user.time_zone %></dd>
       <dt>Location</dt>

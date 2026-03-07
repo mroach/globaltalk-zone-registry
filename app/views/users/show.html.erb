@@ -1,0 +1,33 @@
+<%= content_for(:title, @user.name) %>
+
+<div style="display: flex; justify-content: space-between;">
+  <h1><%= @user.name %></h1>
+  <% if allowed_to?(:edit?, @user) %>
+    <div>
+      <%= button_to("Edit", [:edit, @user], method: :get) %>
+    </div>
+  <% end %>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px;">
+  <div>
+    <h3>Details</h3>
+    <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
+      <dt>Location</dt>
+      <dd><%= @user.location %></dd>
+      <dt>Time Zone</dt>
+      <dd><%= @user.time_zone %></dd>
+      <dt>Socials</dt>
+      <dd><%= @user.socials %></dd>
+    </dl>
+  </div>
+
+  <div>
+    <h3>Zones</h3>
+    <ul>
+      <% @user.zones.each do |zone| %>
+        <li><%= link_to(zone.name, zone) %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

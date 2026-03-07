@@ -67,7 +67,7 @@ body {
 body > nav {
   margin: 0 0 10px 0;
   background-color: var(--macos9-bg-color);
-  border-bottom: solid 4px black;
+  border-bottom: solid 4px #444;
 }
 
 main {
@@ -82,16 +82,23 @@ nav > ul {
 nav > ul > li {
   display: inline-block;
 }
-nav > ul > li > a {
+nav > ul > li:not(:first-child) {
+  padding-left: 14px;
+}
+nav > ul > li > a.btn {
   display: inline-block;
   border: solid 1px dimgray;
   padding: 0.2em 1em;
   margin: 0;
   background-color: var(--macos9-gray1);
   text-decoration: none;
+  transition: background-color 0.3s;
 }
-nav > ul > li > a:hover {
+nav > ul > li > a.btn:hover {
   background-color: var(--macos9-gray2);
+}
+nav > ul > li > a:not(.btn) {
+  color: lightgray;
 }
 
 body > main {

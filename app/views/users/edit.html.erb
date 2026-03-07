@@ -1,0 +1,50 @@
+<h1><%= link_to(@user.name, @user) %></h1>
+
+<% if @user.errors.any? %>
+  <%= @user.errors.messages %>
+<% end %>
+
+<%= form_with(model: @user, url: @user, method: :patch) do |form| %>
+  <div>
+    <%= form.label(:email_address) %>
+    <div><%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username"  %></div>
+  </div>
+
+  <div>
+    <%= form.label(:name) %>
+    <div><%= form.text_field :name, required: true, autofocus: true, autocomplete: "name", placeholder: "Display name/handle"  %></div>
+  </div>
+
+  <div>
+    <%= form.label(:location) %>
+    <div><%= form.text_field :location, required: false, autofocus: true, placeholder: "City and/or country" %></div>
+  </div>
+
+  <div>
+    <%= form.label(:socials) %>
+    <div><%= form.text_field :socials, required: false, autofocus: true, placeholder: "Mastodon, whatever" %></div>
+  </div>
+
+  <div>
+    <%= form.label(:time_zone) %>
+    <div><%= form.select :time_zone, @options.fetch(:time_zones), { selected: @user.time_zone }, {data: { controller: "time-zone", "time-zone-target" => "picker" } }%></div>
+  </div>
+
+  <div>
+    <fieldset>
+      <legend>Change password</legend>
+
+      <div>
+        <div><%= form.password_field :password, autocomplete: "new-password", placeholder: "New password", maxlength: 72 %></div>
+      </div>
+
+      <div>
+        <div><%= form.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Confirm new password", maxlength: 72 %></div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div>
+    <div><%= form.submit "Update" %></div>
+  </div>
+<% end %>
