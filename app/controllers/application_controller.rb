@@ -8,4 +8,5 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   authorize :user, through: -> { Current.user }
+  verify_authorized
 end

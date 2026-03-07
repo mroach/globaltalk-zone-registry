@@ -1,6 +1,7 @@
 class SignupsController < ApplicationController
   allow_unauthenticated_access
   before_action :load_options
+  skip_verify_authorized
 
   def new
     @user = User.new

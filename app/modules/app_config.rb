@@ -47,6 +47,8 @@ module AppConfig
     register :rails_max_threads, :integer, 5
 
     register :smtp_server, :string
+
+    register :zone_max_allowed_network_count, :integer, 20
   end
 
   extend self

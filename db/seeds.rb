@@ -30,11 +30,21 @@ user2 = User.find_or_create_by!(email_address: "user2@example.com") do
   it.time_zone = "Asia/Tokyo"
   it.email_confirmed_at = Time.now
 end
-Zone.find_or_create_by!(name: "Turtles") do
+Zone.find_or_create_by!(name: "Staples") do
   it.assign_attributes(
     user: user2,
     network_ranges: 2940,
-    about: "Lots of printers. You can *never* have too many.",
+    about: <<~MD,
+      # I'm thinking printers
+
+      * Laser
+      * Ink jet
+      * Double sided
+      * Colour
+      * Faxing
+
+      That's what you can expect to find in this zone.
+    MD
     ddns_subdomain: "turtles",
     ddns_ip: "24.34.153.229",
     approved_at: 1.minute.ago

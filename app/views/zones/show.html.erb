@@ -2,27 +2,22 @@
 
 <h1><%= @zone.name %></h1>
 
-<div style="display: flex; gap: 10px">
-<% [:edit].select { allowed_to?(:"#{it}?", @zone) }.each do |act| %>
+<% if allowed_to?(:edit?, @zone) %>
   <div>
-    <%= button_to(act.to_s.humanize, [act, @zone], method: :get) %>
+    <%= button_to("Edit", [:edit, @zone], method: :get) %>
   </div>
 <% end %>
-<%
-  [:approve, :unapprove, :enable, :disable]
-    .select { allowed_to?(:"#{it}?", @zone) }.each do |act| %>
-  <div>
-    <%= button_to(act.to_s.humanize, [act, @zone], method: :patch) %>
-  </div>
-<% end %>
-</div>
 
-<div style="display: grid; grid-template-columns: 1fr 1fr">
+<div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px;">
   <div>
     <h3>Details</h3>
-    <dl style="display: grid; grid-template-columns: 1fr 2fr;">
+    <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
       <dt>Owner</dt>
       <dd><%= @zone.user.name %></dd>
+      <dt>Time Zone</dt>
+      <dd><%= @zone.user.time_zone %></dd>
+      <dt>Location</dt>
+      <dd><%= @zone.user.location %></dd>
 
       <dt><%= Zone.human_attribute_name(:physical_layer) %></dt>
       <dd><%= Zone::PhysicalLayer.label_for(@zone.physical_layer) %></dd>
@@ -42,12 +37,41 @@
   </div>
   <div>
     <h3>Status</h3>
-    <dl style="display: grid; grid-template-columns: 1fr 2fr">
-      <dt>Approved?</dt>
-      <dd><%= @zone.approved? ? "Yes" : "No" %></dd>
+    <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
+      <dt>Approval</dt>
+      <dd>
+        <div style="display: flex; gap: 10px;">
+          <%= @zone.approval_status %>
+          <% if allowed_to?(:approve?, @zone) %>
+            <%= button_to("Approve", [:approve, @zone], method: :patch) %>
+          <% end %>
+          <% if allowed_to?(:reject?, @zone) %>
+            <%= button_to("Reject", [:reject, @zone], method: :patch) %>
+          <% end %>
+        </div>
+        <p class="helptext">Zones are not published in the endpoint list until approved by an admin.</p>
+      </dd>
 
       <dt>Enabled?</dt>
-      <dd><%= @zone.enabled? ? "Yes" : "No" %></dd>
+      <dd>
+        <div style="display: flex; gap: 10px">
+          <%= @zone.enabled? ? "Yes" : "No" %>
+          <% if allowed_to?(:enable?, @zone) %>
+            <%= button_to("Enable", [:enable, @zone], method: :patch) %>
+          <% end %>
+          <% if allowed_to?(:disable?, @zone) %>
+            <%= button_to("Disable", [:disable, @zone], method: :patch) %>
+          <% end %>
+        </div>
+        <p class="helptext">A disabled zone will be removed from the endpoint list until it's enabled.</p>
+        </dd>
+      </dd>
+
+      <dt>Published?</dt>
+      <dd>
+        <div><%= @zone.exported? ? "Yes" : "No" %></div>
+        <p class="helptext">To be published, a zone must be approved, enabled, and have a static endpoint or current DDNS IP.</p>
+      </dd>
 
       <dt>Current public endpoint</dt>
       <dd><code><%= @zone.public_endpoint %></code></dd>
@@ -59,19 +83,33 @@
 </div>
 
 <% if allowed_to?(:view_ddns_secrets?, @zone) %>
-  <div>
-    <h3>DDNS</h3>
-    <p>
-      This GlobalTalk Registry hosts a dynamic DNS service following the DynDNS2 protocol.
-      Most any router will have DynDNS2 baked-in and give you the option to customise the update URL.
+  <div style="background-color: lightyellow; border: solid brown 1px; padding: 10px; margin-top: 20px">
+    <h2>Dynamic DNS</h2>
+
+    <div>
+      <%=
+        render_markdown(<<~MD)
+          This GlobalTalk Registry hosts a dynamic DNS service following the DynDNS2 protocol.
+          Most any router will have DynDNS2 support and give you the option to customise the update URL.
+
+          ### Public IPv4
+
+          In order for this to work, you have to have a publically routable IPv4 address.
+
+          ### CG-NAT
+
+          This will not work if you're behind CG-NAT and updates with CG-NAT IPs will be rejected.
+        MD
+      %>
     </p>
 
-    <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 5px;">
-      <dt>Hostname</dt>
-      <dd><code><%= @zone.ddns_fqdn %></code></dd>
-
+    <h3>Your Secret DDNS Settings</h3>
+    <dl style="width: 800px; margin: 20px; display: grid; grid-template-columns: 1fr 2fr; row-gap: 10px;">
       <dt>Update URL</dt>
       <dd><code><%= ddns_update_url %></code></dd>
+
+      <dt>Hostname</dt>
+      <dd><code><%= @zone.ddns_fqdn %></code></dd>
 
       <dt>Username</dt>
       <dd>Ignored by us. Set to any value e.g. <code>ddns</code></dd>
@@ -79,11 +117,14 @@
       <dt>Password</dt>
       <dd><code><%= @zone.ddns_password %></code></dd>
 
-      <dt>Last IP</dt>
-      <dd><code><%= @zone.ddns_ip %></code></dd>
+      <dt>Current IP</dt>
+      <dd>
+        <% if @zone.ddns_ip %>
+          <code><%= @zone.ddns_ip %></code>
+        <% else %>
+          <em>Awaiting DDNS update from your router</em>
+        <% end %>
+      </dd>
     </dl>
-
-    <p>An example with cURL using your configuration:</p>
-    <pre>curl -u ddns:<%= @zone.ddns_password %> '<%= ddns_update_url(myip: request.remote_ip, hostname: @zone.ddns_subdomain) %>'</pre>
   </div>
 <% end %>

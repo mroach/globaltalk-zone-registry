@@ -29,9 +29,11 @@
 
 en:
   enum:
-    zone:
-      physical_layer:
+    apple_talk:
+      physical_layer: &at_phy
         ethertalk: EtherTalk
         localtalk: LocalTalk
         tokentalk: TokenTalk
         fdditalk: FDDITalk
+    zone:
+      physical_layer: *at_phy

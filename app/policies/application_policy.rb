@@ -1,6 +1,10 @@
 class ApplicationPolicy < ActionPolicy::Base
+  def index?
+    false
+  end
+
   def show?
-    true
+    false
   end
 
   def new?

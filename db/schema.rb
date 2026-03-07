@@ -50,6 +50,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_223512) do
     t.citext "name", null: false
     t.int4range "network_ranges", default: [], null: false, array: true
     t.string "physical_layer", default: "ethertalk", null: false
+    t.datetime "rejected_at", precision: nil
     t.string "static_endpoint"
     t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
@@ -57,7 +58,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_223512) do
     t.index ["ddns_subdomain"], name: "index_zones_on_ddns_subdomain", unique: true
     t.index ["disabled_at"], name: "index_zones_on_disabled_at"
     t.index ["last_verified_at"], name: "index_zones_on_last_verified_at"
+    t.index ["network_ranges"], name: "ix_zones_network_ranges", using: :gin
     t.index ["physical_layer", "name"], name: "index_zones_on_physical_layer_and_name", unique: true
+    t.index ["rejected_at"], name: "index_zones_on_rejected_at"
     t.index ["user_id"], name: "index_zones_on_user_id"
   end
 
