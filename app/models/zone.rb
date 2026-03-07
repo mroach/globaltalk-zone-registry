@@ -71,7 +71,7 @@ class Zone < ApplicationRecord
   scope :rejected, -> { where.not(rejected_at: nil) }
   scope :enabled, -> { where(disabled_at: nil) }
   scope :with_valid_endpoint, -> { where("static_endpoint IS NOT NULL or ddns_ip IS NOT NULL") }
-  scope :exportable, -> { approved.enabled.with_valid_endpoint }
+  scope :exportable, -> { enabled.with_valid_endpoint }
 
   # Find zones where any of the network ranges overlap any of the given ranges
   # @param ranges [Integer | Range | Array<Range>]
@@ -112,7 +112,7 @@ class Zone < ApplicationRecord
   def rejected? = rejected_at.present?
   def disabled? = disabled_at.present?
   def enabled? = !disabled?
-  def exported? = approved? && enabled? && valid_endpoint?
+  def exported? = enabled? && valid_endpoint?
 
   def approval_status
     return :approved if approved?

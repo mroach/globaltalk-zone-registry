@@ -10,7 +10,6 @@
       <th>Name</th>
       <th>Owner</th>
       <th>Endpoint</th>
-      <th>Approved?</th>
       <th>Enabled?</th>
       <th>Published?</th>
       <th>Network Numbers</th>
@@ -23,7 +22,6 @@
         <td><%= link_to(zone.name, zone) %></td>
         <td><%= zone.user.name %></td>
         <td><%= zone.public_endpoint %></td>
-        <td><%= zone.approved? %></td>
         <td><%= zone.enabled? %></td>
         <td><%= zone.exported? %></td>
         <td><%= zone.network_ranges_s %></td>

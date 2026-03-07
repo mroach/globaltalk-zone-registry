@@ -34,20 +34,6 @@
   <div>
     <h3>Status</h3>
     <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
-      <dt>Approval</dt>
-      <dd>
-        <div style="display: flex; gap: 10px;">
-          <%= @zone.approval_status %>
-          <% if allowed_to?(:approve?, @zone) %>
-            <%= button_to("Approve", [:approve, @zone], method: :patch) %>
-          <% end %>
-          <% if allowed_to?(:reject?, @zone) %>
-            <%= button_to("Reject", [:reject, @zone], method: :patch) %>
-          <% end %>
-        </div>
-        <p class="helptext">Zones are not published in the endpoint list until approved by an admin.</p>
-      </dd>
-
       <dt>Enabled?</dt>
       <dd>
         <div style="display: flex; gap: 10px">
@@ -66,7 +52,7 @@
       <dt>Published?</dt>
       <dd>
         <div><%= @zone.exported? ? "Yes" : "No" %></div>
-        <p class="helptext">To be published, a zone must be approved, enabled, and have a static endpoint or current DDNS IP.</p>
+        <p class="helptext">To be published, a zone must enabled and have a static endpoint or current DDNS IP.</p>
       </dd>
 
       <dt>Current public endpoint</dt>
