@@ -65,6 +65,10 @@ body {
 }
 
 body > nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 4px 10px;
   margin: 0 0 10px 0;
   background-color: var(--macos9-bg-color);
   border-bottom: solid 4px #444;

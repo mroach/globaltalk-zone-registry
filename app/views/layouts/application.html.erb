@@ -20,17 +20,19 @@
 
   <body>
     <nav>
+      <%= image_tag("network-browser.png") %>
+      <div style="color: white; font-size: 24px; font-weight: 700; margin-right: 40px; font-family: serif; letter-spacing: -1px;">GlobalTalk Registry</div>
+      <% if Current.user %>
       <ul>
         <li><%= link_to("Zones", zones_path, class: "btn") %></li>
         <li><%= link_to("Users", users_path, class: "btn") %></li>
         <% if Current.user && allowed_to?(:index?, with: ExportPolicy) %>
         <li><%= link_to("AppleTalk Router Config", exports_path, class: "btn") %></li>
         <% end %>
-        <% if Current.user %>
-        <li><%= button_to("Sign Out", session_path, method: :delete) %></li>
         <li><%= link_to(Current.user.name, Current.user) %></li>
-        <% end %>
+        <li><%= button_to("Sign Out", session_path, method: :delete) %></li>
       </ul>
+      <% end %>
     </nav>
     <main>
       <%# These don't belong here. Temporary (so, probably permanent) %>
