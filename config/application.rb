@@ -22,8 +22,9 @@ module GlobalTalk
 
     # Log to STDOUT with the current request id as a default log tag.
     config.log_tags = [:request_id]
-    config.logger = ActiveSupport::TaggedLogging.logger($stdout)
+    config.semantic_logger.add_appender(io: $stdout, formatter: config.rails_semantic_logger.format)
     config.log_level = AppConfig.rails_log_level
+    config.action_view.logger = nil
 
     config.active_record.encryption.primary_key = AppConfig.encryption_primary_key
     config.active_record.encryption.deterministic_key = AppConfig.encryption_deterministic_key
