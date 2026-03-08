@@ -17,6 +17,10 @@ class ZonePolicy < ApplicationPolicy
 
   def edit? = update?
 
+  def destroy?
+    update?
+  end
+
   def view_ddns_secrets?
     user_is_owner?
   end

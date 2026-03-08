@@ -41,8 +41,15 @@ class ZonesController < ApplicationController
     end
   end
 
+  def destroy
+    if @zone.destroy
+      redirect_to(zones_path, notice: "Zone '#{@zone.name}' has been deleted")
+    else
+      redirect_to(@zone, alert: "Failed to delete #{@zone.name}")
+    end
+  end
+
   def approve
-    authorize!(@zone)
     if @zone.update(approved_at: Time.now, rejected_at: nil)
       redirect_to(@zone, notice: "Approved!")
     else
@@ -51,7 +58,6 @@ class ZonesController < ApplicationController
   end
 
   def reject
-    authorize!(@zone)
     if @zone.update(rejected_at: Time.now, approved_at: nil)
       redirect_to(@zone, notice: "Rejected!")
     else
@@ -60,7 +66,6 @@ class ZonesController < ApplicationController
   end
 
   def disable
-    authorize!(@zone)
     if @zone.update(disabled_at: Time.now)
       redirect_to(@zone, notice: "Disabled")
     else
@@ -69,7 +74,6 @@ class ZonesController < ApplicationController
   end
 
   def enable
-    authorize!(@zone)
     if @zone.update(disabled_at: nil)
       redirect_to(@zone, notice: "Enabled")
     else
@@ -81,6 +85,7 @@ class ZonesController < ApplicationController
 
   def load_zone
     @zone = Zone.find(params.require("id"))
+    authorize!(@zone)
   end
 
   def permitted_params

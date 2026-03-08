@@ -2,11 +2,18 @@
 
 <div style="display: flex; justify-content: space-between;">
   <h1><%= @zone.name %></h1>
-  <% if allowed_to?(:edit?, @zone) %>
-    <div>
-      <%= button_to("Edit", [:edit, @zone], method: :get) %>
-    </div>
-  <% end %>
+  <div style="display: flex; gap: 6px">
+    <% if allowed_to?(:edit?, @zone) %>
+      <div>
+        <%= button_to("Edit", [:edit, @zone], method: :get) %>
+      </div>
+    <% end %>
+    <% if allowed_to?(:destroy?, @zone) %>
+      <div>
+        <%= button_to("Delete", @zone, method: :delete, data: { "turbo-confirm" => "Really delete the zone #{@zone.name}? This is irreversible."}) %>
+      </div>
+    <% end %>
+  </div>
 </div>
 
 
