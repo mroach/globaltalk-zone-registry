@@ -8,7 +8,7 @@ class ZonePolicy < ApplicationPolicy
   end
 
   def new?
-    true
+    user.onboarded?
   end
 
   def update?

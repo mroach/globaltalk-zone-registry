@@ -2,18 +2,21 @@
 
 <h1>Zones</h1>
 
-<%= button_to("Register a Zone", new_zone_path, method: :get) %>
+<% if allowed_to?(:new?, Zone) %>
+  <%= button_to("Register a Zone", new_zone_path, method: :get) %>
+<% else %>
+  <p class="private-alert" style="margin: 10px 0">Before registering your zone, please update <%= link_to("your profile", [:edit, Current.user]) %> with your network number.</p>
+<% end %>
 
 <table>
   <thead>
     <tr>
       <th>Name</th>
       <th>Owner</th>
+      <th>Network Ranges</th>
       <th>Endpoint</th>
       <th>Enabled?</th>
       <th>Published?</th>
-      <th>Network Numbers</th>
-      <th class="numeric">Total Network Numbers</th>
     </tr>
   </thead>
   <tbody>
@@ -21,11 +24,10 @@
       <tr>
         <td><%= link_to(zone.name, zone) %></td>
         <td><%= zone.user.name %></td>
+        <td class="numeric"><%= zone.user.network_ranges_s %></td>
         <td><%= zone.public_endpoint %></td>
         <td><%= zone.enabled? %></td>
         <td><%= zone.exported? %></td>
-        <td><%= zone.network_ranges_s %></td>
-        <td class="numeric"><%= zone.total_network_numbers %></td>
       </tr>
     <% end %>
   </tbody>

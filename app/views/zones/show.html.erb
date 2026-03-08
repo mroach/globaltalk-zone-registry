@@ -12,22 +12,22 @@
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px;">
   <div>
-    <h3>Details</h3>
+    <h3>Owner</h3>
     <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
-      <dt>Owner</dt>
+      <dt>Name</dt>
       <dd><%= link_to(@zone.user.name, @zone.user) %></dd>
+
       <dt>Time Zone</dt>
       <dd><%= @zone.user.time_zone %></dd>
+
       <dt>Location</dt>
       <dd><%= @zone.user.location %></dd>
 
-      <dt><%= Zone.human_attribute_name(:network_ranges) %></dt>
-      <dd><code><%= @zone.network_ranges_s %></code></dd>
-
-      <dt><%= Zone.human_attribute_name(:static_endpoint) %></dt>
-      <dd><code><%= @zone.static_endpoint %></code></dd>
+      <dt><%= User.human_attribute_name(:network_ranges) %></dt>
+      <dd><code><%= @zone.user.network_ranges_s %></code></dd>
     </dl>
   </div>
+
   <div>
     <h3>Status</h3>
     <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
@@ -52,6 +52,9 @@
         <p class="helptext">To be published, a zone must enabled and have a static endpoint or current DDNS IP.</p>
       </dd>
 
+      <dt><%= Zone.human_attribute_name(:static_endpoint) %></dt>
+      <dd><code><%= @zone.static_endpoint %></code></dd>
+
       <dt>Current public endpoint</dt>
       <dd>
         <code><%= @zone.public_endpoint %></code>
@@ -70,7 +73,7 @@
 </div>
 
 <% if allowed_to?(:view_ddns_secrets?, @zone) %>
-  <div style="background-color: lightyellow; border: solid brown 1px; padding: 10px; margin-top: 20px">
+  <div class="private-alert" style="margin-top: 20px">
     <h2>Dynamic DNS</h2>
 
     <div>

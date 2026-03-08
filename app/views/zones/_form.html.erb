@@ -1,24 +1,9 @@
 <%= form_with(model: @zone) do |form| %>
-  <h2>Basics</h2>
   <div>
     <%= form.label(:name) %>
     <div><%= form.text_field(:name, required: true, placeholder: "Zone name") %></div>
   </div>
 
-  <div>
-    <%= form.label(:network_ranges) %>
-    <div data-controller="edit-network-number">
-      <%= form.text_field(:network_ranges, value: @zone.network_ranges_s, placeholder: "123, 400-402", required: true, data: { "edit-network-number-target" => "number" }) %>
-      <% unless @zone.persisted? %>
-      <p class="helptext">
-        Need inspiration? Network number
-        <code style="font-weight: 500; cursor: pointer" data-action="click->edit-network-number#use" data-edit-network-number-target="freeNumber" title="Click to use!"><%= Zone.random_free_network_number %></code> is available!
-        <br/>
-        Zones aren't allowed to occupy more than <%= Zone.max_allowed_network_count %> network numbers as there are only <%= AppleTalk.distinct_network_numbers %> to go around.
-      </p>
-      <% end %>
-    </div>
-  </div>
   <div>
     <%= form.label(:about) %>
     <div>

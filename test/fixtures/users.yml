@@ -9,6 +9,7 @@
 #  email_confirmed_at :datetime
 #  location           :string
 #  name               :string           not null
+#  network_ranges     :int4range        default([]), not null, is an Array
 #  password_digest    :string           not null
 #  roles              :string           default([]), not null, is an Array
 #  socials            :string
@@ -18,7 +19,8 @@
 #
 # Indexes
 #
-#  index_users_on_email_address  (email_address) UNIQUE
+#  index_users_on_email_address   (email_address) UNIQUE
+#  index_users_on_network_ranges  (network_ranges) USING gin
 #
 one:
   email_address: one@example.com

@@ -19,11 +19,16 @@
       <dd><%= @user.time_zone %></dd>
       <dt>Socials</dt>
       <dd><%= @user.socials %></dd>
+      <dt>Network ranges</dt>
+      <dd><%= @user.network_ranges_s %></dd>
     </dl>
   </div>
 
   <div>
     <h3>Zones</h3>
+    <% if allowed_to?(:new?, Zone) %>
+      <%= button_to("Register a Zone", new_zone_path, method: :get) %>
+    <% end %>
     <ul>
       <% @user.zones.each do |zone| %>
         <li><%= link_to(zone.name, zone) %></li>

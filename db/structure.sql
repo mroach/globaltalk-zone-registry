@@ -338,7 +338,8 @@ CREATE TABLE public.users (
     socials character varying,
     location character varying,
     time_zone character varying DEFAULT 'Etc/UTC'::character varying NOT NULL,
-    roles character varying[] DEFAULT '{}'::character varying[] NOT NULL
+    roles character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    network_ranges int4range[] DEFAULT '{}'::int4range[] NOT NULL
 );
 
 
@@ -352,7 +353,6 @@ CREATE TABLE public.zones (
     updated_at timestamp(6) without time zone NOT NULL,
     user_id uuid NOT NULL,
     name public.citext NOT NULL,
-    network_ranges int4range[] DEFAULT '{}'::int4range[] NOT NULL,
     static_endpoint character varying,
     about text,
     approved_at timestamp without time zone,
@@ -464,6 +464,13 @@ CREATE UNIQUE INDEX index_users_on_email_address ON public.users USING btree (em
 
 
 --
+-- Name: index_users_on_network_ranges; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_network_ranges ON public.users USING gin (network_ranges);
+
+
+--
 -- Name: index_zones_on_approved_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -503,13 +510,6 @@ CREATE INDEX index_zones_on_rejected_at ON public.zones USING btree (rejected_at
 --
 
 CREATE INDEX index_zones_on_user_id ON public.zones USING btree (user_id);
-
-
---
--- Name: ix_zones_network_ranges; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX ix_zones_network_ranges ON public.zones USING gin (network_ranges);
 
 
 --
@@ -555,6 +555,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260308065716'),
 ('20260307223227'),
 ('20260307164351'),
 ('20260302223512'),

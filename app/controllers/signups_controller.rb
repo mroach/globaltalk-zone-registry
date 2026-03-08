@@ -22,7 +22,8 @@ class SignupsController < ApplicationController
       :name,
       :socials,
       :location,
-      :time_zone
+      :time_zone,
+      :network_ranges
     ).to_h.transform_values(&:presence))
 
     if @user.save
