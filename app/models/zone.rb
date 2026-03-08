@@ -24,6 +24,7 @@
 #  index_zones_on_ddns_subdomain    (ddns_subdomain) UNIQUE
 #  index_zones_on_disabled_at       (disabled_at)
 #  index_zones_on_last_verified_at  (last_verified_at)
+#  index_zones_on_name              (name) UNIQUE
 #  index_zones_on_rejected_at       (rejected_at)
 #  index_zones_on_user_id           (user_id)
 #
@@ -37,7 +38,7 @@ class Zone < ApplicationRecord
   normalizes :name, with: ->(s) { s.strip.presence }
   normalizes :ddns_subdomain, with: ->(s) { s.strip.presence&.parameterize }
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
   validates :static_endpoint, public_endpoint: true, allow_nil: true
   validates :ddns_subdomain, :allow_nil => true, "ddns/subdomain" => true
 

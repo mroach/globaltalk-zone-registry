@@ -499,6 +499,13 @@ CREATE INDEX index_zones_on_last_verified_at ON public.zones USING btree (last_v
 
 
 --
+-- Name: index_zones_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_zones_on_name ON public.zones USING btree (name);
+
+
+--
 -- Name: index_zones_on_rejected_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -555,6 +562,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260308082736'),
 ('20260308065716'),
 ('20260307223227'),
 ('20260307164351'),
