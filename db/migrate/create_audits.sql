@@ -68,6 +68,7 @@ declare
   record_id         text  = audit.to_record_id(TG_RELID, pkey_cols, record_jsonb);
 
   old_record_jsonb  jsonb = to_jsonb(old);
+  old_record_id     text  = audit.to_record_id(TG_RELID, pkey_cols, old_record_jsonb);
   diff_jsonb        jsonb = audit.jsonb_diff_as_object(old_record_jsonb, record_jsonb) - except_cols;
 begin
   insert into audit.logs(
@@ -91,7 +92,7 @@ begin
     TG_TABLE_SCHEMA,
     TG_TABLE_NAME,
 
-    record_id,
+    coalesce(record_id, old_record_id),
     diff_jsonb,
 
     -- values that might come from connection or transaction-local variables
@@ -191,7 +192,7 @@ CREATE TABLE audit.logs (
     trace_id      character varying(255),
     application   character varying(255),
     CONSTRAINT logs_check CHECK (((op = 'TRUNCATE'::audit.operation) OR (record_id IS NOT NULL))),
-    CONSTRAINT logs_record_id_required CHECK (((op = ANY (ARRAY['INSERT'::audit.operation, 'UPDATE'::audit.operation])) = (record_id IS NOT NULL)))
+    CONSTRAINT logs_record_id_required CHECK (((op = ANY (ARRAY['INSERT'::audit.operation, 'UPDATE'::audit.operation, 'DELETE'::audit.operation])) = (record_id IS NOT NULL)))
 );
 CREATE INDEX ix_logs_actor ON audit.logs USING btree (actor);
 CREATE INDEX ix_logs_entrypoint ON audit.logs USING btree (entrypoint);
