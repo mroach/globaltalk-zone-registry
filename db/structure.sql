@@ -302,6 +302,24 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: external_zones; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.external_zones (
+    id uuid DEFAULT uuidv7() NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    source character varying NOT NULL,
+    name public.citext NOT NULL,
+    network_ranges int4range[] DEFAULT '{}'::int4range[] NOT NULL,
+    public_endpoint public.citext,
+    last_lookup_result character varying,
+    last_lookup_at timestamp without time zone,
+    last_ip inet
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -384,6 +402,14 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
+-- Name: external_zones external_zones_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.external_zones
+    ADD CONSTRAINT external_zones_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -448,6 +474,13 @@ CREATE INDEX ix_logs_table_name_and_record_id ON audit.logs USING btree (table_n
 --
 
 CREATE INDEX ix_logs_ts ON audit.logs USING btree (ts);
+
+
+--
+-- Name: index_external_zones_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_external_zones_on_name ON public.external_zones USING btree (name);
 
 
 --
@@ -563,6 +596,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260309182429'),
 ('20260308083956'),
 ('20260308082736'),
 ('20260308065716'),

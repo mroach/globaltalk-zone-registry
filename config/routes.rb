@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get "/nic/update", to: "ddns#update", as: :ddns_update
 
   resources :exports, only: [:index]
+  resources :external_zones, only: [:index]
 
   resources :signups, only: [:new, :create], param: :token do
     get :confirm, on: :member

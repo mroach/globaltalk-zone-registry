@@ -1,0 +1,37 @@
+# == Schema Information
+#
+# Table name: external_zones
+#
+#  id                 :uuid             not null, primary key
+#  last_ip            :inet
+#  last_lookup_at     :datetime
+#  last_lookup_result :string
+#  name               :citext           not null
+#  network_ranges     :int4range        default([]), not null, is an Array
+#  public_endpoint    :citext
+#  source             :string           not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#
+# Indexes
+#
+#  index_external_zones_on_name  (name) UNIQUE
+#
+class ExternalZone < ApplicationRecord
+  def network_ranges_s
+    network_ranges.map do |r|
+      # The only way to get the proper end of a range is using `last` with an arg.
+      r.last(1) => [real_end]
+
+      if r.begin == real_end
+        real_end.to_s
+      else
+        "#{r.begin}-#{real_end}"
+      end
+    end.join(", ")
+  end
+
+  def total_network_numbers
+    network_ranges.map(&:size).sum
+  end
+end

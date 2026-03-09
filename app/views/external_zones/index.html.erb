@@ -1,0 +1,34 @@
+<%= content_for(:title, "External Zones") %>
+
+<h1>External Zones</h1>
+
+<p>
+  These zones have been imported from external sources and made available as peers
+in addition to zones registered in this app.
+<br/>
+If a zone registered in this app shares a name with a zone here, the registered
+zone takes precedence in the endpoint list.
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Network Ranges</th>
+      <th>Network Numbers</th>
+      <th>Endpoint</th>
+      <th>Last Lookup Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @zones.each do |zone| %>
+      <tr>
+        <td><%= zone.name %></td>
+        <td><%= zone.network_ranges_s %></td>
+        <td class="numeric"><%= zone.total_network_numbers %></td>
+        <td><%= zone.public_endpoint %></td>
+        <td><%= zone.last_lookup_result %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

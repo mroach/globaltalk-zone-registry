@@ -8,7 +8,7 @@ class ExportsController < ApplicationController
   def all
     skip_verify_authorized!
 
-    endpoints = base_scope.map(&:public_endpoint).sort
+    endpoints = combined_scope.map(&:public_endpoint).sort
 
     render_text_list(endpoints)
   end
@@ -18,7 +18,7 @@ class ExportsController < ApplicationController
 
     # For DDNS users, use the current IP and skip resolution
     # Address that don't resolve are dropped
-    ips = base_scope.filter_map do |zone|
+    ips = combined_scope.filter_map do |zone|
       if zone.static_endpoint.nil?
         zone.ddns_ip
       else
@@ -37,5 +37,19 @@ class ExportsController < ApplicationController
 
   def base_scope
     Zone.exportable.select(:static_endpoint, :ddns_subdomain)
+  end
+
+  def combined_scope
+    Zone.find_by_sql(<<~SQL)
+      SELECT static_endpoint, ddns_subdomain, ddns_ip
+      FROM zones
+      WHERE (static_endpoint IS NOT NULL OR ddns_ip IS NOT NULL)
+      UNION ALL
+      SELECT public_endpoint, null, last_ip
+      FROM external_zones ez
+      LEFT JOIN zones ON zones.name = ez.name
+      WHERE zones.id IS NULL
+        AND ez.last_ip IS NOT NULL
+    SQL
   end
 end

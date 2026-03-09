@@ -35,6 +35,8 @@ gem "rails_semantic_logger"
 
 gem "resolv"
 
+gem "google-apis-sheets_v4", "~> 0.47"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
@@ -57,4 +59,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem "webmock"
+  gem "vcr"
+  gem "rspec-rails", "~> 8.0"
 end

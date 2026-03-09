@@ -40,6 +40,9 @@ module AppConfig
     register :encryption_deterministic_key, :string
     register :encryption_key_derivation_salt, :string
 
+    register :google_client_id_path, :string, -> { AppConfig.config_dir.join("google_client_id.json") }
+    register :google_token_store_path, :string, -> { AppConfig.config_dir.join("google_tokens.yaml") }
+
     register :ddns_domain_name, :string
     register :ddns_nameserver, :string
     register :ddns_tsig_keyfile_path, :string, -> { AppConfig.config_dir.join("ddns_tsig_keyfile") }

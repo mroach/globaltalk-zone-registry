@@ -1,0 +1,4 @@
+production:
+	spreadsheet_import:
+		class: SheetIngestor::UpdateJob
+		schedule: every day
