@@ -15,6 +15,7 @@ RUN apt-get update -qq && \
         libjemalloc2 \
         postgresql-common \
         bind9-dnsutils \
+        iproute2 \
         && \
     /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
     apt-get install --no-install-recommends -y postgresql-client-18 && \
