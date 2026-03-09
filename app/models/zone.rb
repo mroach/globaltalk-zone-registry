@@ -42,6 +42,12 @@ class Zone < ApplicationRecord
   validates :static_endpoint, public_endpoint: true, allow_nil: true
   validates :ddns_subdomain, :allow_nil => true, "ddns/subdomain" => true
 
+  validate do |zone|
+    unless AppleTalk.valid_zone_name?(zone.name)
+      errors.add(:name, "is not a valid AppleTalk zone name")
+    end
+  end
+
   scope :approved, -> { where(rejected_at: nil).where.not(approved_at: nil) }
   scope :rejected, -> { where.not(rejected_at: nil) }
   scope :enabled, -> { where(disabled_at: nil) }

@@ -12,6 +12,25 @@ module AppleTalk
     MAX_NETWORK_NUMBER
   end
 
+  def valid_zone_name?(input)
+    input = input.strip&.presence
+    return false if input.nil?
+
+    return false if input.length > 32   # Hard limit in the protocol
+    return false if input.include?(":") # AT address separator
+    return false if input.include?("*") # Current/local zone
+
+    # While technically valid, any char below 0x20 is chaos.
+    # Anything over 0xFF is invalid in MacOS Roman
+    return false if input.chars.any? { it.ord < 0x20 || it.ord > 0xFF }
+
+    true
+  end
+
+  def parse_and_normalize_network_ranges(input)
+    normalize_network_ranges(parse_network_ranges(input))
+  end
+
   # Convert a variety of inputs into `Array<Range>`
   #
   # @param value [Range | Integer | String | Array<Range> | Integer | String>]
