@@ -11,10 +11,22 @@
 
     [AIRConfig]: https://github.com/kalleboo/AIRConfig
     [jrouter]: https://gitea.drjosh.dev/josh/jrouter
-
-    You can use this URL in either application to get a list of zone endpoints that
-    are configured and should be reachable.
-
-    <code>#{link_to(endpoints_export_url, endpoints_export_url)}</code>
   MD
 %>
+
+<h2>Pre-resolved</h2>
+
+<p>MacTCP and/or Apple Internet Router can hang and have issues when hostnames
+  don't cleanly resolve to an IPv4 address. If you're having that issue or
+otherwise want a list of peers as IPv4 addresses, use this list which
+will only return resolved endpoint IPs.</p>
+<p style="font-size: 1.2rem"><code><%= link_to(ip_endpoints_export_url, ip_endpoints_export_url) %></code></p>
+
+<h2>Plain endpoints</h2>
+
+<p>This list is the pure, unmodified list of endpoints for all available zones.
+  This works well with jrouter as it'll happily resolve addresses and CNAMEs
+and gracefully handle resolution failures.</p>
+
+<p style="font-size: 1.2rem"><code><%= link_to(all_endpoints_export_url, all_endpoints_export_url) %></code></p>
+

@@ -4,7 +4,8 @@ Rails.application.routes.draw do
 
   get "healthz" => "rails/health#show", :as => :rails_health_check
 
-  get "/pub/exports/endpoints.txt", to: "exports#endpoints", as: :endpoints_export
+  get "/pub/peers/all", to: "exports#all", as: :all_endpoints_export
+  get "/pub/peers/ips", to: "exports#ips", as: :ip_endpoints_export
 
   # DynDNS2 protocol https://help.dyn.com/perform-update.html
   get "/nic/update", to: "ddns#update", as: :ddns_update

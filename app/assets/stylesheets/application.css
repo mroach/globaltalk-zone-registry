@@ -109,6 +109,10 @@ body > main {
   max-width: 1200px;
 }
 
+h1:not(:first-child) { margin: 0.2em 0 0.3em; }
+h2:not(:first-child) { margin: 0.7em 0 0.5em; }
+h3:not(:first-child) { margin: 0.6em 0 0.4em; }
+
 /* This is a crime. Refactor this */
 form > div {
   margin: 1em 0;

@@ -12,16 +12,13 @@ module DDNS
   Error = Class.new(StandardError)
   NotAllowedError = Class.new(Error)
 
-  NAME_PART_REGEX = /\A[a-z0-9][a-z0-9-]*[a-z0-9]*\z/
-  private_constant :NAME_PART_REGEX
-
   extend self
 
   # Update the IP address for the given hostname in the nameserver for the DDNS domain
   #
   # @return [Boolean] Success
   def update_a_record(hostname, ip)
-    unless valid_name_part?(hostname)
+    unless DNS.valid_name_part?(hostname)
       raise ArgumentError, "invalid hostname"
     end
 
@@ -40,13 +37,6 @@ module DDNS
     AppConfig.ddns_domain_name!
   end
 
-  # Validates if the input is a valid *part* of a FQDN.
-  #   ok:   domain, my-domain, my-domain123
-  #   bad:  9domain, MYDOMAIN, MY_DOMAIN
-  def valid_name_part?(input)
-    NAME_PART_REGEX.match?(input)
-  end
-
   # Basic barebones hostname validation.
   # a-z, 0-9, dashes, more than one part. That's it.
   #
@@ -59,7 +49,7 @@ module DDNS
     return false if input[-1] == "."
 
     parts = input.split(".")
-    parts.count > 1 && parts.all? { valid_name_part?(it) }
+    parts.count > 1 && parts.all? { DNS.valid_name_part?(it) }
   end
 
   def valid_ip?(ip)
@@ -70,12 +60,7 @@ module DDNS
   end
 
   def validate_ip!(ip)
-    ip = case ip
-    in IPAddr => obj
-      obj
-    in String => str
-      IPAddr.new(str)
-    end
+    ip = DNS.ip(ip)
 
     # IPv6 will never work on classic Macs
     unless ip.ipv4?
