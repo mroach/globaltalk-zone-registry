@@ -54,6 +54,9 @@ module AppConfig
     register :rails_secret_key_base, :string
 
     register :smtp_server, :string
+    register :smtp_username, :string
+    register :smtp_password, :string
+    register :smtp_port, :integer, 587
 
     register :trusted_proxies, :set, of: :ip
 
