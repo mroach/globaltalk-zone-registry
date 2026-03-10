@@ -1,9 +1,9 @@
 module DDNS
   class UpdateHostnameJob < ApplicationJob
-    def perform(zone_id)
-      zone = Zone.lock.find(zone_id)
+    def perform(network_id)
+      network = Network.lock.find(zone_id)
 
-      hostname = zone.ddns_subdomain
+      hostname = network.ddns_subdomain
       ip = zone.ddns_ip
 
       if hostname.blank? || ip.blank?

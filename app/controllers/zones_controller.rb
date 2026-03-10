@@ -91,9 +91,7 @@ class ZonesController < ApplicationController
   def permitted_params
     params.require(:zone).permit(
       :name,
-      :static_endpoint,
-      :about,
-      :network_ranges
+      :about
     ).to_h.transform_values(&:presence)
   end
 

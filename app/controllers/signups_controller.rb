@@ -22,8 +22,7 @@ class SignupsController < ApplicationController
       :name,
       :socials,
       :location,
-      :time_zone,
-      :network_ranges
+      :time_zone
     ).to_h.transform_values(&:presence))
 
     if @user.save
@@ -40,7 +39,11 @@ class SignupsController < ApplicationController
     user.touch(:email_confirmed_at)
 
     start_new_session_for(user)
-    redirect_to(after_authentication_url)
+    if user.onboarded?
+      redirect_to(after_authentication_url)
+    else
+      redirect_to(onboarding_path, notice: "Email confirmed. Nice.")
+    end
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     redirect_to(new_signup_path, alert: "Confirmation email link is invalid or has expired")
   end

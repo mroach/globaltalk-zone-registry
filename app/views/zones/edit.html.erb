@@ -1,4 +1,4 @@
-<h1>Editing <%= link_to(@zone.name || "Zone", @zone) %></h1>
+<h1>Zone: <%= link_to(@zone.name || "Zone", @zone) %></h1>
 <% if @zone.errors.any? %>
   <div><%= @zone.errors.messages %></div>
 <% end %>

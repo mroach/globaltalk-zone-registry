@@ -320,6 +320,23 @@ CREATE TABLE public.external_zones (
 
 
 --
+-- Name: networks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.networks (
+    id uuid DEFAULT uuidv7() NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    user_id uuid NOT NULL,
+    ranges int4range[] DEFAULT '{}'::int4range[] NOT NULL,
+    static_endpoint character varying,
+    ddns_subdomain public.citext,
+    ddns_ip inet,
+    ddns_password character varying
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -357,8 +374,7 @@ CREATE TABLE public.users (
     socials character varying,
     location character varying,
     time_zone character varying DEFAULT 'Etc/UTC'::character varying NOT NULL,
-    roles character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    network_ranges int4range[] DEFAULT '{}'::int4range[] NOT NULL
+    roles character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -372,15 +388,11 @@ CREATE TABLE public.zones (
     updated_at timestamp(6) without time zone NOT NULL,
     user_id uuid NOT NULL,
     name public.citext NOT NULL,
-    static_endpoint character varying,
     about text,
     approved_at timestamp without time zone,
     rejected_at timestamp without time zone,
     disabled_at timestamp without time zone,
     last_verified_at timestamp without time zone,
-    ddns_subdomain public.citext,
-    ddns_ip inet,
-    ddns_password character varying,
     admin_notes text
 );
 
@@ -407,6 +419,14 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 ALTER TABLE ONLY public.external_zones
     ADD CONSTRAINT external_zones_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: networks networks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.networks
+    ADD CONSTRAINT networks_pkey PRIMARY KEY (id);
 
 
 --
@@ -484,6 +504,20 @@ CREATE UNIQUE INDEX index_external_zones_on_name ON public.external_zones USING 
 
 
 --
+-- Name: index_networks_on_ranges; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_networks_on_ranges ON public.networks USING gin (ranges);
+
+
+--
+-- Name: index_networks_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_networks_on_user_id ON public.networks USING btree (user_id);
+
+
+--
 -- Name: index_sessions_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -498,24 +532,10 @@ CREATE UNIQUE INDEX index_users_on_email_address ON public.users USING btree (em
 
 
 --
--- Name: index_users_on_network_ranges; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_users_on_network_ranges ON public.users USING gin (network_ranges);
-
-
---
 -- Name: index_zones_on_approved_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_zones_on_approved_at ON public.zones USING btree (approved_at);
-
-
---
--- Name: index_zones_on_ddns_subdomain; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_zones_on_ddns_subdomain ON public.zones USING btree (ddns_subdomain);
 
 
 --
@@ -554,6 +574,13 @@ CREATE INDEX index_zones_on_user_id ON public.zones USING btree (user_id);
 
 
 --
+-- Name: networks audit_i_d; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER audit_i_d AFTER INSERT OR DELETE ON public.networks FOR EACH ROW EXECUTE FUNCTION audit.insert_update_delete_trigger('{id,created_at,updated_at}');
+
+
+--
 -- Name: users audit_i_d; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -565,6 +592,13 @@ CREATE TRIGGER audit_i_d AFTER INSERT OR DELETE ON public.users FOR EACH ROW EXE
 --
 
 CREATE TRIGGER audit_i_d AFTER INSERT OR DELETE ON public.zones FOR EACH ROW EXECUTE FUNCTION audit.insert_update_delete_trigger('{about,id,created_at,updated_at}');
+
+
+--
+-- Name: networks audit_u; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER audit_u AFTER UPDATE ON public.networks FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE FUNCTION audit.insert_update_delete_trigger('{id,created_at,updated_at}');
 
 
 --
@@ -596,6 +630,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260309214730'),
 ('20260309182429'),
 ('20260308083956'),
 ('20260308082736'),

@@ -29,9 +29,6 @@
 
       <dt>Location</dt>
       <dd><%= @zone.user.location %></dd>
-
-      <dt><%= User.human_attribute_name(:network_ranges) %></dt>
-      <dd><code><%= @zone.user.network_ranges_s %></code></dd>
     </dl>
   </div>
 
@@ -56,16 +53,7 @@
       <dt>Published?</dt>
       <dd>
         <div><%= @zone.exported? ? "Yes" : "No" %></div>
-        <p class="helptext">To be published, a zone must enabled and have a static endpoint or current DDNS IP.</p>
-      </dd>
-
-      <dt><%= Zone.human_attribute_name(:static_endpoint) %></dt>
-      <dd><code><%= @zone.static_endpoint %></code></dd>
-
-      <dt>Current public endpoint</dt>
-      <dd>
-        <code><%= @zone.public_endpoint %></code>
-        <p class="helptext">The <em>static endpoint</em> takes precedence over the DDNS hostname</p>
+        <p class="helptext">To be published, a zone must enabled and you must have at least one network configured.</p>
       </dd>
     </dl>
   </div>
@@ -79,49 +67,3 @@
   <%= render_markdown(@zone.about) %>
 </div>
 
-<% if allowed_to?(:view_ddns_secrets?, @zone) %>
-  <div class="private-alert" style="margin-top: 20px">
-    <h2>Dynamic DNS</h2>
-
-    <div>
-      <%=
-        render_markdown(<<~MD)
-          This GlobalTalk Registry hosts a dynamic DNS service following the DynDNS2 protocol.
-          Most any router will have DynDNS2 support and give you the option to customise the update URL.
-
-          ### Public IPv4
-
-          In order for this to work, you have to have a publically routable IPv4 address.
-
-          ### CG-NAT
-
-          This will not work if you're behind CG-NAT and updates with CG-NAT IPs will be rejected.
-        MD
-      %>
-    </p>
-
-    <h3>Your Secret DDNS Settings</h3>
-    <dl style="width: 800px; margin: 20px; display: grid; grid-template-columns: 1fr 2fr; row-gap: 10px;">
-      <dt>Update URL</dt>
-      <dd><code><%= ddns_update_url %></code></dd>
-
-      <dt>Hostname</dt>
-      <dd><code><%= @zone.ddns_fqdn %></code></dd>
-
-      <dt>Username</dt>
-      <dd>Ignored by us. Set to any value e.g. <code>ddns</code></dd>
-
-      <dt>Password</dt>
-      <dd><code><%= @zone.ddns_password %></code></dd>
-
-      <dt>Current IP</dt>
-      <dd>
-        <% if @zone.ddns_ip %>
-          <code><%= @zone.ddns_ip %></code>
-        <% else %>
-          <em>Awaiting DDNS update from your router</em>
-        <% end %>
-      </dd>
-    </dl>
-  </div>
-<% end %>

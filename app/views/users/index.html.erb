@@ -8,8 +8,6 @@
       <th>Name</th>
       <th>Location</th>
       <th>Time Zone</th>
-      <th>Network Numbers</th>
-      <th class="numeric">Total Network Numbers</th>
     </tr>
   </thead>
   <tbody>
@@ -18,8 +16,6 @@
         <td><%= link_to(user.name, user) %></td>
         <td><%= user.location %></td>
         <td><%= user.time_zone %></td>
-        <td><%= user.network_ranges_s %></td>
-        <td class="numeric"><%= user.total_network_numbers %></td>
       </tr>
     <% end %>
   </tbody>

@@ -80,7 +80,7 @@ module DDNS
     end
 
     if CGNAT.include?(ip)
-      raise NotAllowedError.new("CG-NAT addresses are not allowed")
+      raise NotAllowedError.new("CGNAT addresses are not allowed")
     end
 
     if Benchmarking.include?(ip) ||

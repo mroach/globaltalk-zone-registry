@@ -1,0 +1,84 @@
+
+<div style="display: flex; justify-content: space-between;">
+  <h1>Network <%= @network.ranges_s %></h1>
+  <div style="display: flex; gap: 6px">
+    <% if allowed_to?(:edit?, @network) %>
+      <div>
+        <%= button_to("Edit", [:edit, @network], method: :get) %>
+      </div>
+    <% end %>
+    <% if allowed_to?(:destroy?, @network) %>
+      <div>
+        <%= button_to("Delete", @network, method: :delete, data: { "turbo-confirm" => "Really delete this network? This is irreversible."}) %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<dl style="display: grid; grid-template-columns: 1fr 4fr; row-gap: 8px">
+  <dt><%= Network.human_attribute_name(:static_endpoint) %></dt>
+  <dd>
+    <% unless @network.static_endpoint.blank? %>
+      <code><%= @network.static_endpoint %></code>
+    <% else %>
+      <em>none</em>
+    <% end %>
+  </dd>
+
+  <dt>Current public endpoint</dt>
+  <dd>
+    <% unless @network.public_endpoint.blank? %>
+      <code><%= @network.public_endpoint %></code>
+    <% else %>
+      <em>none</em>
+    <% end %>
+    <p class="helptext">The <em>static endpoint</em> takes precedence over the DDNS hostname</p>
+  </dd>
+</dl>
+
+<% if allowed_to?(:view_ddns_secrets?, @network) %>
+  <div class="private-alert" style="margin-top: 20px">
+    <h2>Dynamic DNS</h2>
+
+    <div>
+      <%=
+        render_markdown(<<~MD)
+          This GlobalTalk Registry hosts a dynamic DNS service following the DynDNS2 protocol.
+          Most any router will have DynDNS2 support and give you the option to customise the update URL.
+
+          ### Public IPv4
+
+          In order for this to work, you have to have a publically routable IPv4 address.
+
+          ### CGNAT
+
+          This will not work if you're behind CGNAT and updates with CGNAT IPs will be rejected.
+        MD
+      %>
+    </p>
+
+    <h3>Your Secret DDNS Settings</h3>
+    <dl style="width: 800px; margin: 20px; display: grid; grid-template-columns: 1fr 2fr; row-gap: 10px;">
+      <dt>Update URL</dt>
+      <dd><code><%= ddns_update_url %></code></dd>
+
+      <dt>Hostname</dt>
+      <dd><code><%= @network.ddns_fqdn %></code></dd>
+
+      <dt>Username</dt>
+      <dd>Ignored by us. Set to any value e.g. <code>ddns</code></dd>
+
+      <dt>Password</dt>
+      <dd><code><%= @network.ddns_password %></code></dd>
+
+      <dt>Current IP</dt>
+      <dd>
+        <% if @network.ddns_ip %>
+          <code><%= @network.ddns_ip %></code>
+        <% else %>
+          <em>No DDNS updates received yet.</em>
+        <% end %>
+      </dd>
+    </dl>
+  </div>
+<% end %>

@@ -35,14 +35,13 @@ class ExportsController < ApplicationController
     render(plain: items.sort.uniq.join("\n") + "\n")
   end
 
-  def base_scope
-    Zone.exportable.select(:static_endpoint, :ddns_subdomain)
-  end
-
   def combined_scope
-    Zone.find_by_sql(<<~SQL)
+    # Not really correct to join from networks to zones, but we have no
+    # other good way of matching with spreadsheet data and overriding.
+    Network.find_by_sql(<<~SQL)
       SELECT static_endpoint, ddns_subdomain, ddns_ip
-      FROM zones
+      FROM networks
+        INNER JOIN zones ON zones.user_id = networks.user_id
       WHERE (static_endpoint IS NOT NULL OR ddns_ip IS NOT NULL)
       UNION ALL
       SELECT public_endpoint, null, last_ip

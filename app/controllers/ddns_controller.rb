@@ -11,18 +11,18 @@ class DDNSController < ActionController::Base
 
     ip = DDNS.validate_ip!(params.require("myip"))
 
-    zone = Zone.find_by!(ddns_subdomain:)
+    network = Network.find_by!(ddns_subdomain:)
 
-    unless authenticate_with_http_basic { |_u, pass| zone.ddns_password == pass }
+    unless authenticate_with_http_basic { |_u, pass| network.ddns_password == pass }
       return request_http_basic_authentication
     end
 
-    if zone.ddns_ip == ip
+    if network.ddns_ip == ip
       return render(plain: "nochg")
     end
 
-    if zone.update(ddns_ip: ip)
-      DDNS::UpdateHostnameJob.perform_later(zone.id)
+    if network.update(ddns_ip: ip)
+      DDNS::UpdateHostnameJob.perform_later(network.id)
 
       render(plain: "good")
     else

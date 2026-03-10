@@ -21,10 +21,6 @@ class ZonePolicy < ApplicationPolicy
     update?
   end
 
-  def view_ddns_secrets?
-    user_is_owner?
-  end
-
   def approve?
     user.admin? && !record.approved?
   end

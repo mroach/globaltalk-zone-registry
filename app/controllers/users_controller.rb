@@ -42,8 +42,7 @@ class UsersController < ApplicationController
       :name,
       :socials,
       :location,
-      :time_zone,
-      :network_ranges
+      :time_zone
     ).to_h.transform_values(&:presence)
 
     # optional and should be removed if blank

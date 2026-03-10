@@ -5,7 +5,7 @@
 <% if allowed_to?(:new?, Zone) %>
   <%= button_to("Register a Zone", new_zone_path, method: :get) %>
 <% else %>
-  <p class="private-alert" style="margin: 10px 0">Before registering your zone, please update <%= link_to("your profile", [:edit, Current.user]) %> with your network number.</p>
+  <p class="private-alert" style="margin: 10px 0">Before registering your zone, please get your network and endpoint <%= link_to("set up", onboarding_path) %>.</p>
 <% end %>
 
 <table>
@@ -13,8 +13,6 @@
     <tr>
       <th>Name</th>
       <th>Owner</th>
-      <th>Network Ranges</th>
-      <th>Endpoint</th>
       <th>Enabled?</th>
       <th>Published?</th>
     </tr>
@@ -24,8 +22,6 @@
       <tr>
         <td><%= link_to(zone.name, zone) %></td>
         <td><%= zone.user.name %></td>
-        <td><%= zone.user.network_ranges_s %></td>
-        <td><%= zone.public_endpoint %></td>
         <td><%= zone.enabled? %></td>
         <td><%= zone.exported? %></td>
       </tr>

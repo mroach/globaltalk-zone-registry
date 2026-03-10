@@ -13,6 +13,11 @@ Rails.application.routes.draw do
   resources :exports, only: [:index]
   resources :external_zones, only: [:index]
 
+  resources :networks
+
+  get :onboarding, to: "onboarding#index"
+  post :onboarding, to: "onboarding#create"
+
   resources :signups, only: [:new, :create], param: :token do
     get :confirm, on: :member
   end

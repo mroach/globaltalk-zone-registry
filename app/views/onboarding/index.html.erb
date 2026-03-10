@@ -1,0 +1,88 @@
+<h1>Setup</h1>
+
+<p>You're one step closer to getting connected to the GlobalTalk network!</p>
+
+<p>We just need three pieces of information to get you on your way.</p>
+
+<%= form_with(url: onboarding_path, method: :post) do |form| %>
+  <div>
+    <h2>Public Endpoint</h2>
+    <div>
+      <%=
+        render_markdown(<<~MD)
+          Your AppleTalk router must be reachable by the public internet on UDP port 387.
+          If you have a static IPv4 address or a hostname managed with dynamic DNS,
+          enter that here.
+
+          If your ISP has put you behind CGNAT, unfortunately you won't be
+          able to conenct to GlobalTalk without setting-up a tunneling solution.
+
+          If you have a public dynamic IP, you could enter it here, but then you will
+          have to manually update it every time your IP changes.
+
+          Or you can  leave this field blank and then after this step you'll see information about using
+          our dynamic DNS server which will get you set up with a hostname
+          e.g. `my-name.#{DDNS.domain_name}`.
+
+        MD
+      %>
+    </div>
+    <div></div>
+    <div>
+      <%= form.text_field(:endpoint, value: params[:endpoint], placeholder: "IPv4 address or hostname", style: "width: 400px") %>
+    </div>
+  </div>
+
+  <div>
+    <h2>Network Number</h2>
+
+    <%=
+      render_markdown(<<~MD)
+        AppleTalk has a concept of *networks* that are not unlike CIDR blocks in IPv4,
+        if you're famliar with those. Each network has a unique number and there are
+          #{AppleTalk.distinct_network_numbers} total network numbers available.
+
+        AppleTalk Internet Routers will keep an internal mapping of network numbers to
+        public IP endpoints so it knows for example "when I have traffic for network 1234,
+        I send that to the IP router at `203.0.113.8`".
+
+        Each AppleTalk network has the capacity for 255 *objects*. An object is a service
+        like a file share, printer, a chat app.
+
+        Unless you have tens of computers on your network, you only need one network number.
+        If you need more later on, you can always claim another.
+
+        Now you just have to pick a network number that's not already claimed.
+      MD
+    %>
+
+    <div></div>
+    <div data-controller="edit-network-number">
+      <%= form.text_field(:ranges, placeholder: "1234", value: params[:ranges], required: true, data: { "edit-network-number-target" => "number" }) %>
+      <p class="helptext">
+        Need inspiration? Network number
+        <code style="font-weight: 500; cursor: pointer" data-action="click->edit-network-number#use" data-edit-network-number-target="freeNumber" title="Click to use!"><%= Network.random_free_network_number %></code> is available!
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <h2>Zone Name</h2>
+
+    <%=
+      render_markdown(<<~MD)
+        Lastly, what's the name of your AppleTalk zone?
+
+        If you have multiple zones, don't worry, you can add more later.
+      MD
+    %>
+
+    <div></div>
+    <div><%= form.text_field(:zone_name, value: params[:zone_name], required: true) %></div>
+  </div>
+
+  <div>
+    <div></div>
+    <div><%= form.submit "Let's go!" %></div>
+  </div>
+<% end %>

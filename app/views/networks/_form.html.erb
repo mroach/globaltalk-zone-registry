@@ -1,0 +1,43 @@
+<%= form_with(model: @network) do |form| %>
+  <div>
+    <%= form.label(:ranges, "Network number or range(s)") %>
+    <div data-controller="edit-network-number">
+      <%= form.text_field(:ranges, placeholder: "123, 400-402", value: @network.ranges_s, required: true, data: { "edit-network-number-target" => "number" }) %>
+      <% unless @network.ranges? %>
+      <p class="helptext">
+        Need inspiration? Network number
+        <code style="font-weight: 500; cursor: pointer" data-action="click->edit-network-number#use" data-edit-network-number-target="freeNumber" title="Click to use!"><%= Network.random_free_network_number %></code> is available!
+        <br/>
+      <% end %>
+      <p class="helptext">
+        Networks aren't allowed to claim more than <%= Network.max_allowed_network_size %> network numbers as there are only <%= AppleTalk.distinct_network_numbers %> to go around.
+      </p>
+    </div>
+  </div>
+
+  <h2>Endpoint</h2>
+
+  <div>
+    <div>Reachability</div>
+    <div>
+      <%=
+        render_markdown(<<~MD)
+          Your AppleTalk router must be reachable by the public internet on UDP port 387.
+          If you have a static IPv4 address or a hostname managed with dynamic DNS,
+          enter that as the *Static Endpoint*.
+
+          If you have a dynamic IP, you could enter it here, or leave this field blank
+          and then after creating your network you'll see information about using
+          our dynamic DNS server which will get you set up with a hostname
+          e.g. `my-network.#{DDNS.domain_name}`.
+        MD
+      %>
+    </div>
+    <%= form.label(:static_endpoint) %>
+    <div><%= form.text_field(:static_endpoint, placeholder: "Static IPv4 address or hostname", style: "width: 400px") %></div>
+  </div>
+
+  <div>
+    <div><%= form.submit "Update" %></div>
+  </div>
+<% end %>

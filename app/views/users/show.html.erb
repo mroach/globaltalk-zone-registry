@@ -9,30 +9,40 @@
   <% end %>
 </div>
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px;">
+<div>
   <div>
-    <h3>Details</h3>
-    <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
+    <h2>Details</h2>
+    <dl style="display: grid; grid-template-columns: 1fr 4fr; row-gap: 8px;">
       <dt>Location</dt>
       <dd><%= @user.location %></dd>
       <dt>Time Zone</dt>
       <dd><%= @user.time_zone %></dd>
       <dt>Socials</dt>
       <dd><%= @user.socials %></dd>
-      <dt>Network ranges</dt>
-      <dd><code><%= @user.network_ranges_s %></code></dd>
     </dl>
   </div>
 
-  <div>
-    <h3>Zones</h3>
-    <% if allowed_to?(:new?, Zone) %>
-      <%= button_to("Register a Zone", new_zone_path, method: :get) %>
+  <div style="margin: 20px 0">
+    <h2>Networks</h2>
+    <ul>
+      <% @user.networks.each do |network| %>
+        <li><%= link_to(network.ranges_s, network) %></li>
+      <% end %>
+    </ul>
+    <% if allowed_to?(:new?, Network) %>
+      <%= button_to("Register a Network", new_network_path, method: :get) %>
     <% end %>
+  </div>
+
+  <div style="margin: 20px 0">
+    <h2>Zones</h2>
     <ul>
       <% @user.zones.each do |zone| %>
         <li><%= link_to(zone.name, zone) %></li>
       <% end %>
     </ul>
+    <% if allowed_to?(:new?, Zone) %>
+      <%= button_to("Register a Zone", new_zone_path, method: :get) %>
+    <% end %>
   </div>
 </div>

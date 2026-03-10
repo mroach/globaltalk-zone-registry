@@ -31,22 +31,6 @@
   </div>
 
   <div>
-    <%= form.label(:network_ranges) %>
-    <div data-controller="edit-network-number">
-      <%= form.text_field(:network_ranges, value: @user.network_ranges_s, placeholder: "123, 400-402", required: true, data: { "edit-network-number-target" => "number" }) %>
-      <% unless @user.network_ranges? %>
-      <p class="helptext">
-        Need inspiration? Network number
-        <code style="font-weight: 500; cursor: pointer" data-action="click->edit-network-number#use" data-edit-network-number-target="freeNumber" title="Click to use!"><%= User.random_free_network_number %></code> is available!
-        <br/>
-      <% end %>
-      <p class="helptext">
-        Users aren't allowed to claim more than <%= User.max_allowed_network_count %> network numbers as there are only <%= AppleTalk.distinct_network_numbers %> to go around.
-      </p>
-    </div>
-  </div>
-
-  <div>
     <fieldset>
       <legend>Change password</legend>
 
