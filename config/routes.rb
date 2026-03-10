@@ -30,8 +30,8 @@ Rails.application.routes.draw do
 
   resources :users, except: [:new, :create, :destroy], path: "members"
 
-  get "/u/:name", to: "users#show_by_name", as: :user_by_name
-  get "/z/:name", to: "zones#show_by_name", as: :zone_by_name
+  get "/u/:name", to: "users#show_by_name", as: :user_by_name, format: false, constraints: {name: /[^\/]+/}
+  get "/z/:name", to: "zones#show_by_name", as: :zone_by_name, format: false, constraints: {name: /[^\/]+/}
 
   resources :zones
 
