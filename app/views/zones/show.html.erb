@@ -23,7 +23,10 @@
     <dd><%= link_to(@zone.user.name, user_by_name_path(@zone.user.name)) %></dd>
 
     <dt>Time Zone</dt>
-    <dd><%= @zone.user.time_zone %></dd>
+    <dd>
+      <%= @zone.user.time_zone %>
+      <div data-controller="clock" data-clock-target="face" data-clock-tz-value="<%= @zone.user.time_zone %>"></div>
+    </dd>
 
     <dt>Location</dt>
     <dd><%= @zone.user.location %></dd>
