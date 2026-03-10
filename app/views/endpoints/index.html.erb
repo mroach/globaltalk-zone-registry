@@ -1,0 +1,33 @@
+<%= content_for(:title, "Endpoints") %>
+
+<h1>Endpoints</h1>
+
+<% if allowed_to?(:new?, Endpoint) %>
+  <%= button_to("Register an Endpoint", new_endpoint_path, method: :get) %>
+<% end %>
+
+<p>Endpoints allow AppleTalk routers to correlate an AppleTalk network number
+with an address it can talk to over IP. Each user on GlobalTalk needs an endpoint.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Owner</th>
+      <th>Ranges</th>
+      <th title="How many network numbers are claimed?">Size</th>
+      <th>Address</th>
+      <th>Enabled?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @endpoints.each do |endpoint| %>
+      <tr>
+        <td><%= endpoint.user.name %></td>
+        <td><%= link_to(endpoint.ranges_s, endpoint) %></td>
+        <td class="numeric"><%= endpoint.total_network_numbers %></td>
+        <td><%= endpoint.public_endpoint %></td>
+        <td><%= endpoint.enabled? ? "✓" : "✗" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

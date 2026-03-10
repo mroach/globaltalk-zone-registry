@@ -8,9 +8,15 @@ class ExportsController < ApplicationController
   def all
     skip_verify_authorized!
 
-    endpoints = combined_scope.map(&:public_endpoint).sort
+    ips, hostnames = combined_scope.map(&:public_endpoint).uniq.map do |item|
+      DNS.ip(item)
+    rescue IPAddr::InvalidAddressError
+      item
+    end.partition { it.is_a?(IPAddr) }
 
-    render_text_list(endpoints)
+    all = ips.sort.map(&:to_s) + hostnames.sort
+
+    render_text_list(all)
   end
 
   def ips
@@ -32,16 +38,16 @@ class ExportsController < ApplicationController
   private
 
   def render_text_list(items)
-    render(plain: items.sort.uniq.join("\n") + "\n")
+    render(plain: items.map(&:presence).compact.join("\n") + "\n")
   end
 
   def combined_scope
-    # Not really correct to join from networks to zones, but we have no
+    # Not really correct to join from endpoints to zones, but we have no
     # other good way of matching with spreadsheet data and overriding.
-    Network.find_by_sql(<<~SQL)
+    Endpoint.find_by_sql(<<~SQL)
       SELECT static_endpoint, ddns_subdomain, ddns_ip
-      FROM networks
-        INNER JOIN zones ON zones.user_id = networks.user_id
+      FROM endpoints
+        INNER JOIN zones ON zones.user_id = endpoints.user_id
       WHERE (static_endpoint IS NOT NULL OR ddns_ip IS NOT NULL)
       UNION ALL
       SELECT public_endpoint, null, last_ip

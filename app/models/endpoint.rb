@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: networks
+# Table name: endpoints
 #
 #  id              :uuid             not null, primary key
 #  ddns_ip         :inet
@@ -16,15 +16,16 @@
 #
 # Indexes
 #
-#  index_networks_on_ranges   (ranges) USING gin
-#  index_networks_on_user_id  (user_id)
+#  index_endpoints_on_ranges   (ranges) USING gin
+#  index_endpoints_on_user_id  (user_id)
 #
-class Network < ApplicationRecord
+class Endpoint < ApplicationRecord
   audited
 
   belongs_to :user
 
   encrypts :ddns_password
+  normalizes :static_endpoint, with: ->(s) { s.strip&.presence }
   normalizes :ddns_subdomain, with: ->(s) { s.strip.presence&.parameterize }
 
   validates :static_endpoint, public_endpoint: true, allow_nil: true
@@ -42,7 +43,7 @@ class Network < ApplicationRecord
     where(<<~SQL.squish, ranges_literal)
       EXISTS (
         SELECT 1
-        FROM unnest(networks.ranges) AS r1,
+        FROM unnest(endpoints.ranges) AS r1,
              unnest(?::int4range[]) AS r2
         WHERE r1 && r2
       )
@@ -53,7 +54,7 @@ class Network < ApplicationRecord
   before_validation do
     self.ddns_subdomain ||= begin
       hostname = user.name.parameterize
-      if (conflicts = Network.where(ddns_subdomain: hostname).count).positive?
+      if (conflicts = Endpoint.where(ddns_subdomain: hostname).count).positive?
         format("%s-%d", hostname, conflicts + 1)
       else
         hostname
@@ -65,23 +66,23 @@ class Network < ApplicationRecord
     self.ddns_password = Passphrase.generate
   end
 
-  validate do |network|
+  validate do |endpoint|
     limit = AppleTalk.max_network_number
-    if network.ranges.any? { it.begin < 1 || it.end > limit }
+    if endpoint.ranges.any? { it.begin < 1 || it.end > limit }
       errors.add(:ranges, "network numbers must be between 1 and #{limit}")
     end
   end
 
-  validate do |network|
+  validate do
     limit = self.class.max_allowed_network_size
     if total_network_numbers > limit
       errors.add(:ranges, "limit of #{limit} network numbers per endpoint")
     end
   end
 
-  validate do |network|
+  validate do
     if self.class.overlapping_ranges(ranges).where.not(id:).exists?
-      errors.add(:ranges, "overlaps with another network")
+      errors.add(:ranges, "overlaps with another endpoint")
     end
   end
 
@@ -103,7 +104,7 @@ class Network < ApplicationRecord
            FROM params, generate_series(params.start_at, #{max_number}) AS s(n)
            WHERE NOT EXISTS (
              SELECT 1
-             FROM networks, unnest(ranges) AS r
+             FROM endpoints, unnest(ranges) AS r
              WHERE r @> s.n
            )
            UNION ALL
@@ -111,7 +112,7 @@ class Network < ApplicationRecord
            FROM params, generate_series(1, params.start_at - 1) AS s(n)
            WHERE NOT EXISTS (
              SELECT 1
-             FROM networks, unnest(ranges) AS r
+             FROM endpoints, unnest(ranges) AS r
              WHERE r @> s.n
            )
         )

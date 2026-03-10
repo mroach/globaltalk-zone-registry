@@ -13,13 +13,17 @@
     <tr>
       <th>Name</th>
       <th>Owner</th>
+      <th>Location</th>
+      <th>Time Zone</th>
     </tr>
   </thead>
   <tbody>
     <% @zones.each do |zone| %>
       <tr>
-        <td><%= link_to(zone.name, zone) %></td>
-        <td><%= zone.user.name %></td>
+        <td><%= link_to(zone.name, zone, style: "font-weight: bold; font-size: 1.1em") %></td>
+        <td><%= link_to(zone.user.name, zone.user) %></td>
+        <td><%= zone.user.location %></td>
+        <td><%= zone.user.time_zone %></td>
       </tr>
     <% end %>
   </tbody>

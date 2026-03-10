@@ -21,7 +21,6 @@ class Zone < ApplicationRecord
   audited
 
   belongs_to :user
-  has_many :networks, through: :user
 
   normalizes :name, with: ->(s) { s.strip.presence }
 

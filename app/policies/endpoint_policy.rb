@@ -1,4 +1,4 @@
-class NetworkPolicy < ApplicationPolicy
+class EndpointPolicy < ApplicationPolicy
   def index?
     true
   end

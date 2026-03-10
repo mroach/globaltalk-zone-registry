@@ -61,7 +61,7 @@
       <%= form.text_field(:ranges, placeholder: "1234", value: params[:ranges], required: true, data: { "edit-network-number-target" => "number" }) %>
       <p class="helptext">
         Need inspiration? Network number
-        <code style="font-weight: 500; cursor: pointer" data-action="click->edit-network-number#use" data-edit-network-number-target="freeNumber" title="Click to use!"><%= Network.random_free_network_number %></code> is available!
+        <code style="font-weight: 500; cursor: pointer" data-action="click->edit-network-number#use" data-edit-network-number-target="freeNumber" title="Click to use!"><%= Endpoint.random_free_network_number %></code> is available!
       </p>
     </div>
   </div>

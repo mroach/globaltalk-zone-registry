@@ -5,7 +5,7 @@ class OnboardingController < ApplicationController
   end
 
   def create
-    endpoint = params[:endpoint]&.strip&.presence
+    static_endpoint = params[:endpoint]&.strip&.presence
     ranges = params[:ranges]&.strip&.presence
     zone_name = params[:zone_name]&.strip&.presence
 
@@ -14,9 +14,9 @@ class OnboardingController < ApplicationController
       return
     end
 
-    network = Current.user.networks.build(ranges:, static_endpoint: endpoint)
-    unless network.save
-      return render(:index, alert: "Couldn't create this network", status: :unprocessable_content)
+    endpoint = Current.user.endpoints.build(ranges:, static_endpoint:)
+    unless endpoint.save
+      return render(:index, alert: "Couldn't create this endpoint", status: :unprocessable_content)
     end
 
     zone = Current.user.zones.build(name: zone_name)
@@ -24,11 +24,11 @@ class OnboardingController < ApplicationController
       return render(:index, alert: "Couldn't create this zone", status: :unprocessable_content)
     end
 
-    if network.static_endpoint.nil?
-      redirect_to(network, notice: <<~TXT)
-        Your zone and network have been created!
-        Since you left the endpoint empty, presumably you'd like to get Dynamic DNS setup?
-        You can do that here
+    if endpoint.static_endpoint.nil?
+      redirect_to(endpoint, notice: <<~TXT)
+        Your zone and endpoints have been created!
+        Since you left the address empty, presumably you'd like to get Dynamic DNS setup?
+        You can do that here.
       TXT
     else
       redirect_to([:edit, zone], notice: "You're all set to go! Perhaps you'd like to add some information bout your zone?")

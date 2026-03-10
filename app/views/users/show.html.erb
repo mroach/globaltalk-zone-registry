@@ -23,14 +23,14 @@
   </div>
 
   <div style="margin: 20px 0">
-    <h2>Networks</h2>
+    <h2>Endpoints</h2>
     <ul>
-      <% @user.networks.each do |network| %>
-        <li><%= link_to(network.ranges_s, network) %></li>
+      <% @user.endpoints.each do |endpoint| %>
+        <li><%= link_to(endpoint.ranges_s, endpoint) %></li>
       <% end %>
     </ul>
-    <% if allowed_to?(:new?, Network) %>
-      <%= button_to("Register a Network", new_network_path, method: :get) %>
+    <% if allowed_to?(:new?, Endpoint) %>
+      <%= button_to("Register an Endpoint", new_endpoint_path, method: :get) %>
     <% end %>
   </div>
 

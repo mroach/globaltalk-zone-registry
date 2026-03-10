@@ -26,11 +26,11 @@ class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
   has_many :zones
-  has_many :networks
+  has_many :endpoints
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
-  scope :onboarded, -> { where("EXISTS (SELECT 1 FROM networks WHERE user_id = users.id LIMIT 1)") }
+  scope :onboarded, -> { where("EXISTS (SELECT 1 FROM endpoints WHERE user_id = users.id LIMIT 1)") }
 
   class << self
     def email_confirmation_token_expires_in = 14.days
@@ -70,7 +70,7 @@ class User < ApplicationRecord
   end
 
   def onboarded?
-    networks.any?
+    endpoints.any?
   end
 
   Role.keys.each do |role|

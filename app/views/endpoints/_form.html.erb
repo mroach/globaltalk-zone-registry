@@ -1,16 +1,16 @@
-<%= form_with(model: @network) do |form| %>
+<%= form_with(model: @endpoint) do |form| %>
   <div>
     <%= form.label(:ranges, "Network number or range(s)") %>
     <div data-controller="edit-network-number">
-      <%= form.text_field(:ranges, placeholder: "123, 400-402", value: @network.ranges_s, required: true, data: { "edit-network-number-target" => "number" }) %>
-      <% unless @network.ranges? %>
+      <%= form.text_field(:ranges, placeholder: "123, 400-402", value: @endpoint.ranges_s, required: true, data: { "edit-network-number-target" => "number" }) %>
+      <% unless @endpoint.ranges? %>
       <p class="helptext">
         Need inspiration? Network number
-        <code style="font-weight: 500; cursor: pointer" data-action="click->edit-network-number#use" data-edit-network-number-target="freeNumber" title="Click to use!"><%= Network.random_free_network_number %></code> is available!
+        <code style="font-weight: 500; cursor: pointer" data-action="click->edit-network-number#use" data-edit-network-number-target="freeNumber" title="Click to use!"><%= Endpoint.random_free_network_number %></code> is available!
         <br/>
       <% end %>
       <p class="helptext">
-        Networks aren't allowed to claim more than <%= Network.max_allowed_network_size %> network numbers as there are only <%= AppleTalk.distinct_network_numbers %> to go around.
+        Endpoints aren't allowed to claim more than <%= Endpoint.max_allowed_network_size %> network numbers as there are only <%= AppleTalk.distinct_network_numbers %> to go around.
       </p>
     </div>
   </div>
@@ -27,9 +27,9 @@
           enter that as the *Static Endpoint*.
 
           If you have a dynamic IP, you could enter it here, or leave this field blank
-          and then after creating your network you'll see information about using
+          and then after creating your endpoint you'll see information about using
           our dynamic DNS server which will get you set up with a hostname
-          e.g. `my-network.#{DDNS.domain_name}`.
+          e.g. `my-name.#{DDNS.domain_name}`.
         MD
       %>
     </div>
