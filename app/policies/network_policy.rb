@@ -22,4 +22,12 @@ class NetworkPolicy < ApplicationPolicy
   def view_ddns_secrets?
     user_is_owner?
   end
+
+  def enable?
+    update? && record.disabled?
+  end
+
+  def disable?
+    update? && record.enabled?
+  end
 end

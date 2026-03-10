@@ -20,20 +20,4 @@ class ZonePolicy < ApplicationPolicy
   def destroy?
     update?
   end
-
-  def approve?
-    user.admin? && !record.approved?
-  end
-
-  def reject?
-    user.admin? && !record.rejected?
-  end
-
-  def enable?
-    update? && record.disabled?
-  end
-
-  def disable?
-    update? && record.enabled?
-  end
 end

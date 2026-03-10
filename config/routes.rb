@@ -13,7 +13,10 @@ Rails.application.routes.draw do
   resources :exports, only: [:index]
   resources :external_zones, only: [:index]
 
-  resources :networks
+  resources :networks do
+    patch :disable, on: :member
+    patch :enable, on: :member
+  end
 
   get :onboarding, to: "onboarding#index"
   post :onboarding, to: "onboarding#create"
@@ -24,12 +27,7 @@ Rails.application.routes.draw do
 
   resources :users, except: [:new, :create, :destroy]
 
-  resources :zones do
-    patch :approve, on: :member
-    patch :reject, on: :member
-    patch :disable, on: :member
-    patch :enable, on: :member
-  end
+  resources :zones
 
   root "home#index"
 end

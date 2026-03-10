@@ -15,26 +15,62 @@
   </div>
 </div>
 
-<dl style="display: grid; grid-template-columns: 1fr 4fr; row-gap: 8px">
-  <dt><%= Network.human_attribute_name(:static_endpoint) %></dt>
-  <dd>
-    <% unless @network.static_endpoint.blank? %>
-      <code><%= @network.static_endpoint %></code>
-    <% else %>
-      <em>none</em>
-    <% end %>
-  </dd>
+<div style="display: grid; grid-template-columns: 1fr 1fr;">
 
-  <dt>Current public endpoint</dt>
-  <dd>
-    <% unless @network.public_endpoint.blank? %>
-      <code><%= @network.public_endpoint %></code>
-    <% else %>
-      <em>none</em>
-    <% end %>
-    <p class="helptext">The <em>static endpoint</em> takes precedence over the DDNS hostname</p>
-  </dd>
-</dl>
+  <dl style="display: grid; grid-template-columns: 1fr 4fr; row-gap: 8px">
+    <dt><%= Network.human_attribute_name(:static_endpoint) %></dt>
+    <dd>
+      <% unless @network.static_endpoint.blank? %>
+        <code><%= @network.static_endpoint %></code>
+      <% else %>
+        <em>none</em>
+      <% end %>
+    </dd>
+
+    <dt>Current public endpoint</dt>
+    <dd>
+      <% unless @network.public_endpoint.blank? %>
+        <code><%= @network.public_endpoint %></code>
+      <% else %>
+        <em>none</em>
+      <% end %>
+      <p class="helptext">The <em>static endpoint</em> takes precedence over the DDNS hostname</p>
+    </dd>
+  </dl>
+
+  <div>
+    <h3>Status</h3>
+    <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
+      <dt>Enabled?</dt>
+      <dd>
+        <div style="display: flex; gap: 10px">
+          <%= @network.enabled? ? "Yes" : "No" %>
+          <% if allowed_to?(:enable?, @network) %>
+            <%= button_to("Enable", [:enable, @network], method: :patch) %>
+          <% end %>
+          <% if allowed_to?(:disable?, @network) %>
+            <%= button_to("Disable", [:disable, @network], method: :patch) %>
+          <% end %>
+        </div>
+        <p class="helptext">A disabled network will be removed from the endpoint list.</p>
+        </dd>
+      </dd>
+
+      <dt>Published?</dt>
+      <dd>
+        <div><%= @network.exported? ? "Yes" : "No" %></div>
+        <p class="helptext">To be published, a network must enabled and have either a static endpoint or an IP set via dynamic DNS.</p>
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<% if @network.notes.present? %>
+  <h2>Notes</h2>
+  <div style="border: solid dimgray 1px; padding: 1em">
+    <%= render_markdown(@network.notes) %>
+  </div>
+<% end %>
 
 <% if allowed_to?(:view_ddns_secrets?, @network) %>
   <div class="private-alert" style="margin-top: 20px">

@@ -53,7 +53,7 @@ module DDNS
   end
 
   def valid_ip?(ip)
-    validate_ip(ip)
+    validate_ip!(ip)
     true
   rescue NotAllowedError, IPAddr::InvalidAddressError
     false

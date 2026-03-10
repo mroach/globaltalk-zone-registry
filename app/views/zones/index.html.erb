@@ -13,8 +13,6 @@
     <tr>
       <th>Name</th>
       <th>Owner</th>
-      <th>Enabled?</th>
-      <th>Published?</th>
     </tr>
   </thead>
   <tbody>
@@ -22,8 +20,6 @@
       <tr>
         <td><%= link_to(zone.name, zone) %></td>
         <td><%= zone.user.name %></td>
-        <td><%= zone.enabled? %></td>
-        <td><%= zone.exported? %></td>
       </tr>
     <% end %>
   </tbody>

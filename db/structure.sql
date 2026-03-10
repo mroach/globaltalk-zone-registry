@@ -332,7 +332,9 @@ CREATE TABLE public.networks (
     static_endpoint character varying,
     ddns_subdomain public.citext,
     ddns_ip inet,
-    ddns_password character varying
+    ddns_password character varying,
+    notes text,
+    disabled_at timestamp(6) without time zone
 );
 
 
@@ -390,9 +392,6 @@ CREATE TABLE public.zones (
     name public.citext NOT NULL,
     about text,
     approved_at timestamp without time zone,
-    rejected_at timestamp without time zone,
-    disabled_at timestamp without time zone,
-    last_verified_at timestamp without time zone,
     admin_notes text
 );
 
@@ -539,31 +538,10 @@ CREATE INDEX index_zones_on_approved_at ON public.zones USING btree (approved_at
 
 
 --
--- Name: index_zones_on_disabled_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_zones_on_disabled_at ON public.zones USING btree (disabled_at);
-
-
---
--- Name: index_zones_on_last_verified_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_zones_on_last_verified_at ON public.zones USING btree (last_verified_at);
-
-
---
 -- Name: index_zones_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_zones_on_name ON public.zones USING btree (name);
-
-
---
--- Name: index_zones_on_rejected_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_zones_on_rejected_at ON public.zones USING btree (rejected_at);
 
 
 --
@@ -630,6 +608,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260310121025'),
 ('20260309214730'),
 ('20260309182429'),
 ('20260308083956'),

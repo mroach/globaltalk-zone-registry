@@ -38,6 +38,14 @@
   </div>
 
   <div>
+    <div>Notes</div>
+    <div>
+      <%= form.text_area(:notes, style: "width: 100%; height: 250px; font-family: monospace") %>
+      <p class="helptext">Markdown is supported here.</p>
+    </div>
+  </div>
+
+  <div>
     <div><%= form.submit "Update" %></div>
   </div>
 <% end %>

@@ -49,38 +49,6 @@ class ZonesController < ApplicationController
     end
   end
 
-  def approve
-    if @zone.update(approved_at: Time.now, rejected_at: nil)
-      redirect_to(@zone, notice: "Approved!")
-    else
-      redirect_to(@zone, alert: "Approval failed")
-    end
-  end
-
-  def reject
-    if @zone.update(rejected_at: Time.now, approved_at: nil)
-      redirect_to(@zone, notice: "Rejected!")
-    else
-      redirect_to(@zone, alert: "Rejection failed #{@zone.errors.messages}")
-    end
-  end
-
-  def disable
-    if @zone.update(disabled_at: Time.now)
-      redirect_to(@zone, notice: "Disabled")
-    else
-      redirect_to(@zone, alert: "Disable failed")
-    end
-  end
-
-  def enable
-    if @zone.update(disabled_at: nil)
-      redirect_to(@zone, notice: "Enabled")
-    else
-      redirect_to(@zone, alert: "Enable failed")
-    end
-  end
-
   private
 
   def load_zone

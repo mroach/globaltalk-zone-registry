@@ -1,5 +1,5 @@
 class NetworksController < ApplicationController
-  before_action :load_network, only: [:show, :edit, :update, :destroy]
+  before_action :load_network, only: [:show, :edit, :update, :destroy, :enable, :disable]
 
   def index
     authorize!
@@ -43,12 +43,29 @@ class NetworksController < ApplicationController
     end
   end
 
+  def disable
+    if @network.update(disabled_at: Time.now)
+      redirect_to(@network, notice: "Disabled")
+    else
+      redirect_to(@network, alert: "Disable failed")
+    end
+  end
+
+  def enable
+    if @network.update(disabled_at: nil)
+      redirect_to(@network, notice: "Enabled")
+    else
+      redirect_to(@network, alert: "Enable failed")
+    end
+  end
+
   private
 
   def permitted_params
     params.require(:network).permit(
       :ranges,
-      :static_endpoint
+      :static_endpoint,
+      :notes
     )
   end
 

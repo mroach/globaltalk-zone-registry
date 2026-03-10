@@ -6,6 +6,8 @@
 #  ddns_ip         :inet
 #  ddns_password   :string
 #  ddns_subdomain  :citext
+#  disabled_at     :datetime
+#  notes           :text
 #  ranges          :int4range        default([]), not null, is an Array
 #  static_endpoint :string
 #  created_at      :datetime         not null
@@ -29,6 +31,8 @@ class Network < ApplicationRecord
   validates :ddns_subdomain, :allow_nil => true, "ddns/subdomain" => true
 
   scope :with_valid_endpoint, -> { where("static_endpoint IS NOT NULL or ddns_ip IS NOT NULL") }
+  scope :enabled, -> { where(disabled_at: nil) }
+  scope :exportable, -> { enabled.with_valid_endpoint }
 
   # @param ranges [Integer | Range | Array<Range>]
   scope :overlapping_ranges, ->(ranges) {
@@ -115,6 +119,10 @@ class Network < ApplicationRecord
       SQL
     end
   end
+
+  def disabled? = disabled_at.present?
+  def enabled? = !disabled?
+  def exported? = enabled?
 
   # Get the list of network ranges in a human-readable list.
   def ranges_s

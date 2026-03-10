@@ -16,50 +16,18 @@
   </div>
 </div>
 
+<div>
+  <h3>Owner</h3>
+  <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
+    <dt>Name</dt>
+    <dd><%= link_to(@zone.user.name, @zone.user) %></dd>
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px;">
-  <div>
-    <h3>Owner</h3>
-    <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
-      <dt>Name</dt>
-      <dd><%= link_to(@zone.user.name, @zone.user) %></dd>
+    <dt>Time Zone</dt>
+    <dd><%= @zone.user.time_zone %></dd>
 
-      <dt>Time Zone</dt>
-      <dd><%= @zone.user.time_zone %></dd>
-
-      <dt>Location</dt>
-      <dd><%= @zone.user.location %></dd>
-    </dl>
-  </div>
-
-  <div>
-    <h3>Status</h3>
-    <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
-      <dt>Enabled?</dt>
-      <dd>
-        <div style="display: flex; gap: 10px">
-          <%= @zone.enabled? ? "Yes" : "No" %>
-          <% if allowed_to?(:enable?, @zone) %>
-            <%= button_to("Enable", [:enable, @zone], method: :patch) %>
-          <% end %>
-          <% if allowed_to?(:disable?, @zone) %>
-            <%= button_to("Disable", [:disable, @zone], method: :patch) %>
-          <% end %>
-        </div>
-        <p class="helptext">A disabled zone will be removed from the endpoint list.</p>
-        </dd>
-      </dd>
-
-      <dt>Published?</dt>
-      <dd>
-        <div><%= @zone.exported? ? "Yes" : "No" %></div>
-        <p class="helptext">To be published, a zone must enabled and you must have at least one network configured.</p>
-      </dd>
-    </dl>
-  </div>
-
-  <div>
-  </div>
+    <dt>Location</dt>
+    <dd><%= @zone.user.location %></dd>
+  </dl>
 </div>
 
 <h2>About</h2>
