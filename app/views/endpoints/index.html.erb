@@ -22,7 +22,7 @@ with an address it can talk to over IP. Each user on GlobalTalk needs an endpoin
   <tbody>
     <% @endpoints.each do |endpoint| %>
       <tr>
-        <td><%= endpoint.user.name %></td>
+        <td><%= link_to(endpoint.user.name, user_by_name_path(endpoint.user.name)) %></td>
         <td><%= link_to(endpoint.ranges_s, endpoint) %></td>
         <td class="numeric"><%= endpoint.total_network_numbers %></td>
         <td><%= endpoint.public_endpoint %></td>

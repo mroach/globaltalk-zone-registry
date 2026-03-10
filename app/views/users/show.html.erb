@@ -38,7 +38,7 @@
     <h2>Zones</h2>
     <ul>
       <% @user.zones.each do |zone| %>
-        <li><%= link_to(zone.name, zone) %></li>
+        <li><%= link_to(zone.name, zone_by_name_path(zone.name)) %></li>
       <% end %>
     </ul>
     <% if allowed_to?(:new?, Zone) %>

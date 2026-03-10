@@ -20,8 +20,8 @@
   <tbody>
     <% @zones.each do |zone| %>
       <tr>
-        <td><%= link_to(zone.name, zone, style: "font-weight: bold; font-size: 1.1em") %></td>
-        <td><%= link_to(zone.user.name, zone.user) %></td>
+        <td><%= link_to(zone.name, zone_by_name_path(zone.name), style: "font-weight: bold; font-size: 1.1em") %></td>
+        <td><%= link_to(zone.user.name, user_by_name_path(zone.user.name)) %></td>
         <td><%= zone.user.location %></td>
         <td><%= zone.user.time_zone %></td>
       </tr>

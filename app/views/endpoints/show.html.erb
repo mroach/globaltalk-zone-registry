@@ -18,6 +18,12 @@
 <div style="display: grid; grid-template-columns: 1fr 1fr;">
 
   <div>
+    <h3>Owner</h3>
+    <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px;">
+      <dt>Name</dt>
+      <dd><%= link_to(@endpoint.user.name, user_by_name_path(@endpoint.user.name)) %></dd>
+    </dl>
+
     <h3>Addresses</h3>
     <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 8px">
       <dt><%= Endpoint.human_attribute_name(:static_endpoint) %></dt>

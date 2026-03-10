@@ -6,7 +6,7 @@
 #  email_address      :string           not null
 #  email_confirmed_at :datetime
 #  location           :string
-#  name               :string           not null
+#  name               :citext           not null
 #  password_digest    :string           not null
 #  roles              :string           default([]), not null, is an Array
 #  slug               :string           not null
@@ -18,6 +18,7 @@
 # Indexes
 #
 #  index_users_on_email_address  (email_address) UNIQUE
+#  index_users_on_name           (name) UNIQUE
 #  index_users_on_slug           (slug) UNIQUE
 #
 class User < ApplicationRecord
@@ -34,8 +35,8 @@ class User < ApplicationRecord
   normalizes :slug, with: ->(e) { e.strip.parameterize }
   normalizes :name, with: ->(e) { e.strip }
 
-  validates :name, presence: true, allow_blank: false, length: { in: 3..50 }
-  validates :slug, presence: true, allow_blank: false, length: { in: 5..30 }
+  validates :name, presence: true, uniqueness: true, allow_blank: false, length: {in: 3..50}
+  validates :slug, presence: true, uniqueness: true, allow_blank: false, length: {in: 5..30}
 
   scope :onboarded, -> { where("EXISTS (SELECT 1 FROM endpoints WHERE user_id = users.id LIMIT 1)") }
 

@@ -1,5 +1,5 @@
 class ZonesController < ApplicationController
-  before_action :load_zone, except: [:index, :new, :create]
+  before_action :load_zone, except: [:index, :new, :create, :show_by_name]
   before_action :load_options, only: [:new, :edit, :create, :update]
 
   def index
@@ -8,11 +8,15 @@ class ZonesController < ApplicationController
   end
 
   def show
-    authorize!(@zone)
+  end
+
+  def show_by_name
+    @zone = Zone.find_sole_by(name: params.require(:name).strip)
+    authorize!(@zone, to: :show?)
+    render(:show)
   end
 
   def edit
-    authorize!(@zone)
   end
 
   def new
@@ -33,7 +37,6 @@ class ZonesController < ApplicationController
   end
 
   def update
-    authorize!(@zone)
     if @zone.update(permitted_params)
       redirect_to(@zone)
     else

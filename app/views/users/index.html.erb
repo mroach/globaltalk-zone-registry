@@ -1,6 +1,6 @@
-<%= content_for(:title, "Users") %>
+<%= content_for(:title, "Members") %>
 
-<h1>Users</h1>
+<h1>Members</h1>
 
 <table>
   <thead>
@@ -8,14 +8,20 @@
       <th>Name</th>
       <th>Location</th>
       <th>Time Zone</th>
+      <th>Zones</th>
     </tr>
   </thead>
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= link_to(user.name, user) %></td>
+        <td><%= link_to(user.name, user_by_name_path(user.name)) %></td>
         <td><%= user.location %></td>
         <td><%= user.time_zone %></td>
+        <td>
+          <% user.zones.each do |zone| %>
+            <%= link_to(zone.name, zone_by_name_path(zone.name)) %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

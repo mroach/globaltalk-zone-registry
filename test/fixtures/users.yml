@@ -8,7 +8,7 @@
 #  email_address      :string           not null
 #  email_confirmed_at :datetime
 #  location           :string
-#  name               :string           not null
+#  name               :citext           not null
 #  password_digest    :string           not null
 #  roles              :string           default([]), not null, is an Array
 #  slug               :string           not null
@@ -20,6 +20,7 @@
 # Indexes
 #
 #  index_users_on_email_address  (email_address) UNIQUE
+#  index_users_on_name           (name) UNIQUE
 #  index_users_on_slug           (slug) UNIQUE
 #
 one:

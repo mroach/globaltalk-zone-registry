@@ -6,7 +6,6 @@ class ExportsController < ApplicationController
   def index
     authorize!(with: ExportPolicy)
 
-
     user_slug = Current.user.slug
     @all_url = export_peerlist_url(user_slug:, variant: Variant::ALL)
     @ips_url = export_peerlist_url(user_slug:, variant: Variant::IPS)
@@ -15,7 +14,7 @@ class ExportsController < ApplicationController
   def peers
     # not doing anything with this at the moment
     user_slug = params.require(:user_slug)
-    user = User.find_sole_by(slug: user_slug)
+    _user = User.find_sole_by(slug: user_slug)
 
     case params.required(:variant)
     in Variant::ALL | Variant::JROUTER | Variant::MIXED

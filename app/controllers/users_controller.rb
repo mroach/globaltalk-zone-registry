@@ -1,13 +1,19 @@
 class UsersController < ApplicationController
   before_action :load_options, only: [:edit, :update]
-  before_action :load_user, except: [:index]
+  before_action :load_user, except: [:index, :show_by_name]
 
   def index
     authorize!
-    @users = User.order(:name)
+    @users = User.preload(:zones).order(:name)
   end
 
   def show
+  end
+
+  def show_by_name
+    @user = User.find_sole_by(name: params.require(:name).strip)
+    authorize!(@user, to: :show?)
+    render(:show)
   end
 
   def edit

@@ -1,7 +1,7 @@
 module DDNS
   class UpdateHostnameJob < ApplicationJob
     def perform(endpoint_id)
-      network = Endpoint.lock.find(zone_id)
+      endpoint = Endpoint.lock.find(zone_id)
 
       hostname = endpoint.ddns_subdomain
       ip = endpoint.ddns_ip
