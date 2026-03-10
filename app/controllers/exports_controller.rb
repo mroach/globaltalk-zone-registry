@@ -1,8 +1,32 @@
 class ExportsController < ApplicationController
+  Variant = Enum.define_from_values("all", "jrouter", "mixed", "ips")
+
   allow_unauthenticated_access only: [:all, :ips]
 
   def index
     authorize!(with: ExportPolicy)
+
+
+    user_slug = Current.user.slug
+    @all_url = export_peerlist_url(user_slug:, variant: Variant::ALL)
+    @ips_url = export_peerlist_url(user_slug:, variant: Variant::IPS)
+  end
+
+  def peers
+    # not doing anything with this at the moment
+    user_slug = params.require(:user_slug)
+    user = User.find_sole_by(slug: user_slug)
+
+    case params.required(:variant)
+    in Variant::ALL | Variant::JROUTER | Variant::MIXED
+      all
+    in Variant::IPS
+      ips
+    in other
+      render(plain: "don't know the #{other} format", status: :not_found)
+    end
+  rescue ActiveRecord::RecordNotFound
+    render(:not_found)
   end
 
   def all
@@ -32,7 +56,7 @@ class ExportsController < ApplicationController
       end
     end
 
-    render_text_list(ips)
+    render_text_list(ips.sort.uniq)
   end
 
   private

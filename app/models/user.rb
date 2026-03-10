@@ -9,6 +9,7 @@
 #  name               :string           not null
 #  password_digest    :string           not null
 #  roles              :string           default([]), not null, is an Array
+#  slug               :string           not null
 #  socials            :string
 #  time_zone          :string           default("Etc/UTC"), not null
 #  created_at         :datetime         not null
@@ -17,6 +18,7 @@
 # Indexes
 #
 #  index_users_on_email_address  (email_address) UNIQUE
+#  index_users_on_slug           (slug) UNIQUE
 #
 class User < ApplicationRecord
   Role = Enum.define_from_values("admin")
@@ -29,8 +31,25 @@ class User < ApplicationRecord
   has_many :endpoints
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+  normalizes :slug, with: ->(e) { e.strip.parameterize }
+  normalizes :name, with: ->(e) { e.strip }
+
+  validates :name, presence: true, allow_blank: false, length: { in: 3..50 }
+  validates :slug, presence: true, allow_blank: false, length: { in: 5..30 }
 
   scope :onboarded, -> { where("EXISTS (SELECT 1 FROM endpoints WHERE user_id = users.id LIMIT 1)") }
+
+  before_validation do
+    self.slug ||= begin
+      param = format("%s-%03i", name.parameterize, rand(1000))
+
+      if param.length > 30
+        param = param[..29]
+      end
+
+      param
+    end
+  end
 
   class << self
     def email_confirmation_token_expires_in = 14.days

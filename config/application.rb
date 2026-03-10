@@ -21,7 +21,7 @@ module GlobalTalk
     config.autoload_lib(ignore: %w[assets tasks])
 
     # Log to STDOUT with the current request id as a default log tag.
-    config.log_tags = [:request_id]
+    config.log_tags = [:request_id, :remote_ip]
     config.semantic_logger.add_appender(io: $stdout, formatter: config.rails_semantic_logger.format)
     config.log_level = AppConfig.rails_log_level
     config.action_view.logger = nil

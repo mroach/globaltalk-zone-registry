@@ -31,6 +31,14 @@
   </div>
 
   <div>
+    <%= form.label(:slug, "Unique URL ID") %>
+    <div>
+      <%= form.text_field :slug, required: true %>
+      <p class="helptext">This is used in your unique URLs for fetching peers. You can change it if you want, but it must be unique.</p>
+    </div>
+  </div>
+
+  <div>
     <fieldset>
       <legend>Change password</legend>
 

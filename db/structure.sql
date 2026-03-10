@@ -376,7 +376,8 @@ CREATE TABLE public.users (
     socials character varying,
     location character varying,
     time_zone character varying DEFAULT 'Etc/UTC'::character varying NOT NULL,
-    roles character varying[] DEFAULT '{}'::character varying[] NOT NULL
+    roles character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    slug character varying NOT NULL
 );
 
 
@@ -531,6 +532,13 @@ CREATE UNIQUE INDEX index_users_on_email_address ON public.users USING btree (em
 
 
 --
+-- Name: index_users_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_slug ON public.users USING btree (slug);
+
+
+--
 -- Name: index_zones_on_approved_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -608,6 +616,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260310165607'),
 ('20260310154910'),
 ('20260310121025'),
 ('20260309214730'),

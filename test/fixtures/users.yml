@@ -11,6 +11,7 @@
 #  name               :string           not null
 #  password_digest    :string           not null
 #  roles              :string           default([]), not null, is an Array
+#  slug               :string           not null
 #  socials            :string
 #  time_zone          :string           default("Etc/UTC"), not null
 #  created_at         :datetime         not null
@@ -19,6 +20,7 @@
 # Indexes
 #
 #  index_users_on_email_address  (email_address) UNIQUE
+#  index_users_on_slug           (slug) UNIQUE
 #
 one:
   email_address: one@example.com
