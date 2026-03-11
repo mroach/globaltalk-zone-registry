@@ -40,6 +40,7 @@ gem "google-apis-sheets_v4", "~> 0.47"
 gem "appsignal"
 
 gem "ruby-vips"
+gem "maxmind-geoip2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

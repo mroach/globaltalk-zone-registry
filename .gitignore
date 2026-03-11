@@ -10,6 +10,9 @@
 # Ignore all environment files.
 /.env*
 
+/data/geoip
+!/data/geoip/.keep
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*

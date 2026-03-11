@@ -87,6 +87,18 @@ class Endpoint < ApplicationRecord
     end
   end
 
+  after_commit do
+    if saved_change_to_static_endpoint? || saved_change_to_ddns_ip?
+      GeoIP::LocateEndpointJob.perform_later(id)
+    end
+  end
+
+  after_commit do
+    if saved_change_to_coordinates?
+      MapGenerator::GenerateImageJob.perform_later
+    end
+  end
+
   class << self
     # Sanity check and abuse prevention: don't allow a single network to have
     # more than this many network numbers
