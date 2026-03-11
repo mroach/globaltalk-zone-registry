@@ -17,4 +17,10 @@ module ApplicationHelper
       Redcarpet::Markdown.new(renderer, options).render(str).html_safe
     end
   end
+
+  def maybe_error_for(model, attr)
+    if (errors = model.errors[attr]).any?
+      tag.div(errors.join(", "), style: "color: red")
+    end
+  end
 end

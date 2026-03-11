@@ -1,9 +1,5 @@
 <h1><%= link_to(@user.name, @user) %></h1>
 
-<% if @user.errors.any? %>
-  <%= @user.errors.messages %>
-<% end %>
-
 <%= form_with(model: @user, url: @user, method: :patch) do |form| %>
   <div>
     <%= form.label(:email_address) %>
@@ -34,6 +30,7 @@
     <%= form.label(:slug, "Unique URL ID") %>
     <div>
       <%= form.text_field :slug, required: true %>
+      <%= maybe_error_for(form.object, :slug) %>
       <p class="helptext">This is used in your unique URLs for fetching peers. You can change it if you want, but it must be unique.</p>
     </div>
   </div>

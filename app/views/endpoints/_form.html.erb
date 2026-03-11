@@ -3,6 +3,7 @@
     <%= form.label(:ranges, "Network number or range(s)") %>
     <div data-controller="edit-network-number">
       <%= form.text_field(:ranges, placeholder: "123, 400-402", value: @endpoint.ranges_s, required: true, data: { "edit-network-number-target" => "number" }) %>
+      <%= maybe_error_for(form.object, :ranges) %>
       <% unless @endpoint.ranges? %>
       <p class="helptext">
         Need inspiration? Network number
@@ -34,7 +35,10 @@
       %>
     </div>
     <%= form.label(:static_endpoint) %>
-    <div><%= form.text_field(:static_endpoint, placeholder: "Static IPv4 address or hostname", style: "width: 400px") %></div>
+    <div>
+      <%= form.text_field(:static_endpoint, placeholder: "Static IPv4 address or hostname", style: "width: 400px") %>
+      <%= maybe_error_for(form.object, :static_endpoint) %>
+    </div>
   </div>
 
   <div>
