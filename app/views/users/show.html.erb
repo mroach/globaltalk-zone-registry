@@ -29,11 +29,13 @@
     <h2>Endpoints</h2>
     <ul>
       <% @user.endpoints.each do |endpoint| %>
-        <li><%= link_to(endpoint.ranges_s, endpoint) %></li>
+        <li><%= link_to(endpoint.ranges_s, endpoint) %> at <%= endpoint.public_endpoint %></li>
       <% end %>
     </ul>
-    <% if allowed_to?(:new?, Endpoint) %>
-      <%= button_to("Register an Endpoint", new_endpoint_path, method: :get) %>
+    <% if Current.user == @user && allowed_to?(:new?, Endpoint) %>
+      <div style="margin: 20px">
+        <%= button_to("Register an Endpoint", new_endpoint_path, method: :get) %>
+      </div>
     <% end %>
   </div>
 
@@ -44,8 +46,10 @@
         <li><%= link_to(zone.name, zone_by_name_path(zone.name)) %></li>
       <% end %>
     </ul>
-    <% if allowed_to?(:new?, Zone) %>
-      <%= button_to("Register a Zone", new_zone_path, method: :get) %>
+    <% if Current.user == @user && allowed_to?(:new?, Zone) %>
+      <div style="margin: 20px">
+        <%= button_to("Register a Zone", new_zone_path, method: :get) %>
+      </div>
     <% end %>
   </div>
 </div>
