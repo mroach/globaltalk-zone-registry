@@ -3,6 +3,7 @@
 # Table name: endpoints
 #
 #  id              :uuid             not null, primary key
+#  coordinates     :point
 #  ddns_ip         :inet
 #  ddns_password   :string
 #  ddns_subdomain  :citext

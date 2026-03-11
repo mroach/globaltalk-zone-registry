@@ -368,6 +368,9 @@ GEM
       rubocop-ast (>= 1.47.1, < 2.0)
     ruby-next-core (1.2.0)
     ruby-progressbar (1.13.0)
+    ruby-vips (2.3.0)
+      ffi (~> 1.12)
+      logger
     rubyzip (3.2.2)
     securerandom (0.4.1)
     selenium-webdriver (4.41.0)
@@ -480,6 +483,7 @@ DEPENDENCIES
   redcarpet
   resolv
   rspec-rails (~> 8.0)
+  ruby-vips
   selenium-webdriver
   solid_cable
   solid_cache

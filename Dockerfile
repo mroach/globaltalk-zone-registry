@@ -14,6 +14,7 @@ RUN apt-get update -qq && \
         curl \
         libjemalloc2 \
         postgresql-common \
+        libvips42 \
         bind9-dnsutils \
         iproute2 \
         && \

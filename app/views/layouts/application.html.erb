@@ -20,8 +20,10 @@
 
   <body>
     <nav>
-      <%= image_tag("network-browser.png") %>
-      <div style="color: white; font-size: 24px; font-weight: 700; margin-right: 40px; font-family: serif; letter-spacing: -1px;">GlobalTalk Registry</div>
+      <%= link_to(root_path, style: "display: flex; gap: 10px; text-decoration: none") do %>
+        <%= image_tag("network-browser.png") %>
+        <div style="color: white; font-size: 24px; font-weight: 700; margin-right: 40px; font-family: serif; letter-spacing: -1px;">GlobalTalk Registry</div>
+      <% end %>
       <% if Current.user %>
       <ul>
         <li><%= link_to("Members", users_path, class: "btn") %></li>

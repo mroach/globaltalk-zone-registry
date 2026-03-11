@@ -1,3 +1,25 @@
 <h1>GlobalTalk Registry</h1>
+<% unless Current.user.present? %>
+  <%= form_with url: session_path do |form| %>
+    <div>
+      <%= form.label(:email_address) %>
+      <div><%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address] %></div>
+    </div>
 
-<p>Your computer is broadcasting an IP address! <%= request.remote_ip %></p>
+    <div>
+      <%= form.label(:password) %>
+      <div><%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72 %></div>
+    </div>
+    <%= form.submit "Sign in" %>
+  <% end %>
+
+  <%= link_to "Forgot password?", new_password_path %>
+  <%= link_to "Sign up", new_signup_path %>
+<% end %>
+
+<hr style="margin: 20px 0" />
+
+<p>Endpoints around the world</p>
+<div>
+  <%= image_tag("/images/gen/map.png") %>
+</div>

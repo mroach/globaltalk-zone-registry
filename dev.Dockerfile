@@ -6,7 +6,7 @@ FROM docker.io/library/ruby:${ruby_version}-slim AS base
 
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-      curl build-essential git libpq-dev libyaml-dev pkg-config \
+      curl build-essential git libpq-dev libyaml-dev libvips42 pkg-config \
       postgresql-common
 
 RUN /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \

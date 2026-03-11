@@ -249,6 +249,15 @@ $_$;
 
 
 --
+-- Name: hashpoint(point); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.hashpoint(point) RETURNS integer
+    LANGUAGE sql IMMUTABLE
+    AS $_$SELECT hashfloat8($1[0]) # hashfloat8($1[1])$_$;
+
+
+--
 -- Name: immutable_record(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -261,6 +270,23 @@ begin
     TG_TABLE_NAME;
 end;
 $$;
+
+
+--
+-- Name: point_hash_ops; Type: OPERATOR FAMILY; Schema: public; Owner: -
+--
+
+CREATE OPERATOR FAMILY public.point_hash_ops USING hash;
+
+
+--
+-- Name: point_hash_ops; Type: OPERATOR CLASS; Schema: public; Owner: -
+--
+
+CREATE OPERATOR CLASS public.point_hash_ops
+    DEFAULT FOR TYPE point USING hash FAMILY public.point_hash_ops AS
+    OPERATOR 1 ~=(point,point) ,
+    FUNCTION 1 (point, point) public.hashpoint(point);
 
 
 SET default_tablespace = '';
@@ -316,7 +342,8 @@ CREATE TABLE public.endpoints (
     ddns_ip inet,
     ddns_password character varying,
     notes text,
-    disabled_at timestamp(6) without time zone
+    disabled_at timestamp(6) without time zone,
+    coordinates point
 );
 
 
@@ -623,6 +650,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260311153633'),
 ('20260310231318'),
 ('20260310165607'),
 ('20260310154910'),
