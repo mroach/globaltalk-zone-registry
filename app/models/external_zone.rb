@@ -3,6 +3,7 @@
 # Table name: external_zones
 #
 #  id                 :uuid             not null, primary key
+#  coordinates        :point
 #  last_ip            :inet
 #  last_lookup_at     :datetime
 #  last_lookup_result :string
@@ -18,6 +19,18 @@
 #  index_external_zones_on_name  (name) UNIQUE
 #
 class ExternalZone < ApplicationRecord
+  after_commit do
+    if saved_change_to_public_endpoint?
+      GeoIP::LocateEndpointJob.perform_later(self)
+    end
+  end
+
+  after_commit do
+    if saved_change_to_coordinates?
+      MapGenerator::GenerateImageJob.perform_later
+    end
+  end
+
   def network_ranges_s
     network_ranges.map do |r|
       # The only way to get the proper end of a range is using `last` with an arg.

@@ -9,8 +9,13 @@ module MapGenerator
     end
 
     def perform
-      coords = Endpoint.where("coordinates IS NOT NULL").pluck(:coordinates)
-      coords.each { plot(it.x, it.y) }
+      ExternalZone.where("coordinates IS NOT NULL").distinct
+        .pluck(:coordinates)
+        .each { plot(it.x, it.y, color: [133, 0, 219]) }
+
+      Endpoint.where("coordinates IS NOT NULL").distinct
+        .pluck(:coordinates)
+        .each { plot(it.x, it.y, color: [255, 0, 190]) }
 
       add_timestamp
 

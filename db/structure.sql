@@ -361,7 +361,8 @@ CREATE TABLE public.external_zones (
     public_endpoint public.citext,
     last_lookup_result character varying,
     last_lookup_at timestamp without time zone,
-    last_ip inet
+    last_ip inet,
+    coordinates point
 );
 
 
@@ -650,6 +651,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260311221415'),
 ('20260311153633'),
 ('20260310231318'),
 ('20260310165607'),

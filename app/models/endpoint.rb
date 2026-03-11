@@ -89,7 +89,7 @@ class Endpoint < ApplicationRecord
 
   after_commit do
     if saved_change_to_static_endpoint? || saved_change_to_ddns_ip?
-      GeoIP::LocateEndpointJob.perform_later(id)
+      GeoIP::LocateEndpointJob.perform_later(self)
     end
   end
 
