@@ -126,7 +126,7 @@ class NSUpdate
     @server = server
     @tsig = nil
     @command_set = command_set
-    @logger = Rails.logger.tagged(self.class.name)
+    @logger = Rails.logger
   end
 
   def with_tsig_secret(...)
