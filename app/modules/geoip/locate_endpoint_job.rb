@@ -2,7 +2,6 @@ module GeoIP
   class LocateEndpointJob < ApplicationJob
     # This works on Endpoint and ExternalZone
     def perform(endpoint)
-      endpoint = global_id.find
       address = Resolv.getaddress(endpoint.public_endpoint)
 
       reader = MaxMind::GeoIP2::Reader.new(

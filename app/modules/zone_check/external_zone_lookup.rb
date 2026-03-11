@@ -5,11 +5,12 @@ module ZoneCheck
 
       case DNS.resolve_address!(zone.public_endpoint)
       in IPAddr => addr
+        addr = DDNS.validate_ip!(addr)
         zone.update(last_lookup_at: Time.now, last_lookup_result: "OK", last_ip: addr)
       in nil
         zone.update(last_lookup_at: Time.now, last_lookup_result: "NXDOMAIN")
       end
-    rescue DNS::Error, Resolv::ResolvError => err
+    rescue DNS::Error, DDNS::Error, Resolv::ResolvError => err
       zone.update(last_lookup_at: Time.now, last_lookup_result: err.message)
     end
   end
