@@ -83,6 +83,9 @@ GEM
     annotaterb (4.22.0)
       activerecord (>= 6.0.0)
       activesupport (>= 6.0.0)
+    appsignal (4.8.3)
+      logger
+      rack (>= 2.0.0)
     ast (2.4.3)
     base64 (0.3.0)
     bcrypt (3.1.21)
@@ -459,6 +462,7 @@ DEPENDENCIES
   action_policy
   amazing_print
   annotaterb
+  appsignal
   bcrypt (~> 3.1.7)
   bootsnap
   bundler-audit

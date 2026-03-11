@@ -31,6 +31,8 @@ module AppConfig
       end
     end
 
+    register :appsignal_push_api_key, :string
+
     register :database_host, :string
     register :database_name, :string
     register :database_password, :string
