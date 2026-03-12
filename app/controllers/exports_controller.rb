@@ -43,6 +43,9 @@ class ExportsController < ApplicationController
   private
 
   def render_text_list(items)
+    # AIRConfig will not work with HTTP keepalive
+    headers["Connection"] = "close"
+
     render(plain: items.map(&:presence).compact.join("\n") + "\n")
   end
 end
