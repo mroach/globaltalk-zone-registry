@@ -21,6 +21,10 @@ Rails.application.configure do
       generate_map: {
         cron: "every hour",
         class: "MapGenerator::GenerateImageJob"
+      },
+      refresh_resolved_ip_cache: {
+        cron: "every hour",
+        class: "Exports::RefreshResolvedIPCacheJob"
       }
     }
   }

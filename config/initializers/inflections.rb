@@ -15,6 +15,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym("DDNS")
   inflect.acronym("DNS")
   inflect.acronym("GeoIP")
+  inflect.acronym("IP")
   inflect.acronym("NSUpdate")
   inflect.acronym("PostgreSQL")
 end

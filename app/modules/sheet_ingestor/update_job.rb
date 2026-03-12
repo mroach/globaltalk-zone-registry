@@ -11,6 +11,9 @@ module SheetIngestor
           public_endpoint: zd.endpoint
         }, on_duplicate: :update, unique_by: :name)
       end
+
+      # Wait for the zone checks to be probably done
+      Exports::RefreshResolvedIPCacheJob.set(wait: 1.minute).perform_later
     end
   end
 end

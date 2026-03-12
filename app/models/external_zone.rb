@@ -26,8 +26,8 @@ class ExternalZone < ApplicationRecord
   end
 
   after_commit do
-    if saved_change_to_coordinates?
-      MapGenerator::GenerateImageJob.perform_later
+    if saved_change_to_public_endpoint?
+      ZoneCheck::ExternalZoneLookup.perform_later(self)
     end
   end
 
