@@ -47,6 +47,8 @@ module Exports
         WHERE zones.id IS NULL
           AND ez.last_ip IS NOT NULL
           AND ez.last_lookup_result = 'OK'
+          AND ez.network_ranges IS NOT NULL
+          AND cardinality(ez.network_ranges) > 0
       SQL
     end
   end
