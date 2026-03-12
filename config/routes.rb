@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount GoodJob::Engine => "/admin/jobs"
+
   resource :session
   resources :passwords, param: :token
 

@@ -43,6 +43,8 @@ module GlobalTalk
       }
     end
 
+    config.active_job.queue_adapter = :good_job
+
     config.silence_healthcheck_path = "/healthz"
 
     config.active_storage.variant_processor = :disabled

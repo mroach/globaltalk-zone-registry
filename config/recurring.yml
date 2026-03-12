@@ -1,7 +1,0 @@
-production:
-  spreadsheet_import:
-    class: SheetIngestor::UpdateJob
-    schedule: every day
-  generate_map:
-    class: MapGenerator::GenerateImageJob
-    schedule: every hour
