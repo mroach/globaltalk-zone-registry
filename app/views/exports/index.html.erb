@@ -7,11 +7,7 @@
     needs to know addresses of other routers to connect to.
 
     [AIRConfig] and [jrouter] both support loading a list of AppleTalk router
-    endpoints from a text file.
-
-    URLs are unique to each user. This keeps the door open to future customisation
-    options and makes things a bit more secure. If you don't like your URL parameter,
-    you can edit your profile to change it.
+    endpoints from a URL serving a plain text file.
 
     [AIRConfig]: https://github.com/kalleboo/AIRConfig
     [jrouter]: https://gitea.drjosh.dev/josh/jrouter
@@ -25,6 +21,8 @@
 
 <h2>Variants</h2>
 
+These URLs are also accessible over plain <code>http://</code>
+
 <h3>Plain endpoints</h3>
 
 <p>This list is the pure, unmodified list of endpoints for all available zones.
@@ -35,10 +33,17 @@ and gracefully handle resolution failures.</p>
 
 <h3>Pre-resolved IP Addresses</h3>
 
-<p><strong>MacTCP</strong> and/or <strong>Apple Internet Router</strong> can hang and have issues when hostnames
-  don't cleanly resolve to an IPv4 address. If you're having that issue or
-prefer a list of peers as IPv4 addresses, use this list which
-will only return resolved endpoint IPs. This can take longer to generate.</p>
+<%=
+  render_markdown(<<~MD)
+    **MacTCP** and/or **Apple Internet Router** can hang or have other issues
+    when a hostname doesn't resolve to an IPv4 address, or when a hostname
+    is a nested/chained CNAME.
+
+    This list is a cached, pre-resolved list if IPv4 endpoint addresses.
+    The caveat to using this list is that dynamic IPs resolved from a
+    hostname will become outdated, so you'll want to refresh more often.
+  MD
+%>
 
 <p style="font-size: 1.2rem"><code><%= link_to(@ips_url, @ips_url) %></code></p>
 
