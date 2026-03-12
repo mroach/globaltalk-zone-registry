@@ -1,7 +1,7 @@
 class ExportsController < ApplicationController
   Variant = Enum.define_from_values("all", "jrouter", "mixed", "ips")
 
-  allow_unauthenticated_access only: [:all, :ips]
+  allow_unauthenticated_access only: [:all, :ips, :peers]
 
   def index
     authorize!(with: ExportPolicy)
