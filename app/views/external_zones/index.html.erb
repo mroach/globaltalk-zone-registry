@@ -8,6 +8,9 @@ in addition to zones registered in this app.
 <br/>
 If a zone registered in this app shares a name with a zone here, the registered
 zone takes precedence in the endpoint list.
+<br />
+Zones from this list are included in the <%= link_to("Router Config", exports_path) %>
+exports if they have defined network rantes and a valid endpoint address.
 </p>
 
 <table>
@@ -15,9 +18,10 @@ zone takes precedence in the endpoint list.
     <tr>
       <th>Name</th>
       <th>Network Ranges</th>
-      <th>Network Numbers</th>
+      <th>Net Size</th>
       <th>Endpoint</th>
-      <th>Last Lookup Result</th>
+      <th>DNS Lookup</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -28,6 +32,13 @@ zone takes precedence in the endpoint list.
         <td class="numeric"><%= zone.total_network_numbers %></td>
         <td><%= zone.public_endpoint %></td>
         <td><%= zone.last_lookup_result %></td>
+        <td>
+          <% if zone.last_lookup_result == "OK" && zone.network_ranges.any? %>
+            <%= image_tag("happy-mac.gif") %>
+          <% else %>
+            <%= image_tag("sad-mac.png") %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

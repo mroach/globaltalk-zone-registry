@@ -39,7 +39,7 @@ class ExternalZone < ApplicationRecord
       if r.begin == real_end
         real_end.to_s
       else
-        "#{r.begin}-#{real_end}"
+        "#{r.begin} - #{real_end}"
       end
     end.join(", ")
   end
