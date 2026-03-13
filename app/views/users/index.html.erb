@@ -7,7 +7,7 @@
     <tr>
       <th>Name</th>
       <th>Location</th>
-      <th>Time Zone</th>
+      <th>Socials</th>
       <th>Zones</th>
     </tr>
   </thead>
@@ -16,7 +16,7 @@
       <tr>
         <td><%= link_to(user.name, user_by_name_path(user.name)) %></td>
         <td><%= user.location %></td>
-        <td><%= user.time_zone %></td>
+        <td><%= user.socials %></td>
         <td>
           <% user.zones.each do |zone| %>
             <%= link_to(zone.name, zone_by_name_path(zone.name)) %>

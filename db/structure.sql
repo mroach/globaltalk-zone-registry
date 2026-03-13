@@ -875,7 +875,7 @@ CREATE INDEX index_zones_on_user_id ON public.zones USING btree (user_id);
 -- Name: endpoints audit_i_d; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER audit_i_d AFTER INSERT OR DELETE ON public.endpoints FOR EACH ROW EXECUTE FUNCTION audit.insert_update_delete_trigger('{id,created_at,updated_at}');
+CREATE TRIGGER audit_i_d AFTER INSERT OR DELETE ON public.endpoints FOR EACH ROW EXECUTE FUNCTION audit.insert_update_delete_trigger('{last_seen_at,id,created_at,updated_at}');
 
 
 --
@@ -896,7 +896,7 @@ CREATE TRIGGER audit_i_d AFTER INSERT OR DELETE ON public.zones FOR EACH ROW EXE
 -- Name: endpoints audit_u; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER audit_u AFTER UPDATE ON public.endpoints FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE FUNCTION audit.insert_update_delete_trigger('{id,created_at,updated_at}');
+CREATE TRIGGER audit_u AFTER UPDATE ON public.endpoints FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE FUNCTION audit.insert_update_delete_trigger('{last_seen_at,id,created_at,updated_at}');
 
 
 --
@@ -928,6 +928,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260313205439'),
 ('20260313184849'),
 ('20260312183801'),
 ('20260311221415'),
