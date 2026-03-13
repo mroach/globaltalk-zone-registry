@@ -19,6 +19,16 @@
 #  index_external_zones_on_name  (name) UNIQUE
 #
 class ExternalZone < ApplicationRecord
+  scope :exportable, -> {
+    joins("LEFT JOIN zones ON zones.name = external_zones.name").where(<<~SQL.squish)
+      zones.id IS NULL
+      AND external_zones.last_ip IS NOT NULL
+      AND external_zones.last_lookup_result = 'OK'
+      AND external_zones.network_ranges IS NOT NULL
+      AND cardinality(external_zones.network_ranges) > 0
+    SQL
+  }
+
   after_commit do
     if saved_change_to_public_endpoint?
       GeoIP::LocateEndpointJob.perform_later(self)

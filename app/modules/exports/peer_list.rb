@@ -33,23 +33,10 @@ module Exports
     private
 
     def combined_scope
-      # Not really correct to join from endpoints to zones, but we have no
-      # other good way of matching with spreadsheet data and overriding.
-      Endpoint.find_by_sql(<<~SQL)
-        SELECT static_endpoint, ddns_subdomain, ddns_ip
-        FROM endpoints
-          INNER JOIN zones ON zones.user_id = endpoints.user_id
-        WHERE (static_endpoint IS NOT NULL OR ddns_ip IS NOT NULL)
-        UNION ALL
-        SELECT public_endpoint, null, last_ip
-        FROM external_zones ez
-        LEFT JOIN zones ON zones.name = ez.name
-        WHERE zones.id IS NULL
-          AND ez.last_ip IS NOT NULL
-          AND ez.last_lookup_result = 'OK'
-          AND ez.network_ranges IS NOT NULL
-          AND cardinality(ez.network_ranges) > 0
-      SQL
+      ours = Endpoint.exportable.select("static_endpoint, ddns_subdomain, ddns_ip")
+      theirs = ExternalZone.exportable.select("public_endpoint, null, last_ip")
+
+      Endpoint.find_by_sql("#{ours.to_sql} UNION #{theirs.to_sql}")
     end
   end
 end

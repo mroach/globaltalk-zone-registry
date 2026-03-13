@@ -34,7 +34,8 @@ class Endpoint < ApplicationRecord
 
   scope :with_valid_endpoint, -> { where("static_endpoint IS NOT NULL or ddns_ip IS NOT NULL") }
   scope :enabled, -> { where(disabled_at: nil) }
-  scope :exportable, -> { enabled.with_valid_endpoint }
+  scope :with_zones, -> { where("EXISTS (SELECT 1 FROM zones WHERE zones.user_id = endpoints.user_id)") }
+  scope :exportable, -> { enabled.with_valid_endpoint.with_zones }
 
   # @param ranges [Integer | Range | Array<Range>]
   scope :overlapping_ranges, ->(ranges) {
