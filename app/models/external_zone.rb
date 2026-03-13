@@ -7,6 +7,7 @@
 #  last_ip            :inet
 #  last_lookup_at     :datetime
 #  last_lookup_result :string
+#  last_seen_at       :datetime
 #  name               :citext           not null
 #  network_ranges     :int4range        default([]), not null, is an Array
 #  public_endpoint    :citext
@@ -56,5 +57,11 @@ class ExternalZone < ApplicationRecord
 
   def total_network_numbers
     network_ranges.map(&:size).sum
+  end
+
+  def seen_recently?(thresh = 24.hours)
+    return false if last_seen_at.nil?
+
+    last_seen_at > thresh.ago
   end
 end

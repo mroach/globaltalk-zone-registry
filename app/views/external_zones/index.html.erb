@@ -30,14 +30,29 @@ exports if they have defined network rantes and a valid endpoint address.
         <td><%= zone.name %></td>
         <td><%= zone.network_ranges_s %></td>
         <td class="numeric"><%= zone.total_network_numbers %></td>
-        <td><%= zone.public_endpoint %></td>
-        <td><%= zone.last_lookup_result %></td>
+        <td>
+          <div style="display: flex; gap: 8px; align-items: center">
+            <% if zone.seen_recently? %>
+              <svg height="0.8em" width="1em">
+                <circle cx="6" cy="6" r="6" style="fill: seagreen"></circle>
+              </svg>
+            <% else %>
+              <svg height="0.8em" width="1em">
+                <circle cx="6" cy="6" r="6" style="fill: darkgray"></circle>
+              </svg>
+            <% end %>
+            <%= zone.public_endpoint %>
+          </div>
+        </td>
         <td>
           <% if zone.last_lookup_result == "OK" && zone.network_ranges.any? %>
-            <%= image_tag("happy-mac.gif") %>
+            <%= image_tag("happy-mac.gif", style: "display: inline-block") %>
           <% else %>
-            <%= image_tag("sad-mac.png") %>
+            <%= image_tag("sad-mac.png", style: "display: inline-block") %>
           <% end %>
+          <%= zone.last_lookup_result %>
+        </td>
+        <td>
         </td>
       </tr>
     <% end %>

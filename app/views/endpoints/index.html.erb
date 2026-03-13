@@ -25,7 +25,20 @@ with an address it can talk to over IP. Each user on GlobalTalk needs an endpoin
         <td><%= link_to(endpoint.user.name, user_by_name_path(endpoint.user.name)) %></td>
         <td><%= link_to(endpoint.ranges_s, endpoint) %></td>
         <td class="numeric"><%= endpoint.total_network_numbers %></td>
-        <td><%= endpoint.public_endpoint %></td>
+        <td>
+          <div style="display: flex; gap: 8px; align-items: center">
+            <% if endpoint.seen_recently? %>
+              <svg height="0.8em" width="1em">
+                <circle cx="6" cy="6" r="6" style="fill: seagreen"></circle>
+              </svg>
+            <% else %>
+              <svg height="0.8em" width="1em">
+                <circle cx="6" cy="6" r="6" style="fill: darkgray"></circle>
+              </svg>
+            <% end %>
+            <%= endpoint.public_endpoint %>
+          </div>
+        </td>
         <td><%= endpoint.enabled? ? "✓" : "✗" %></td>
       </tr>
     <% end %>

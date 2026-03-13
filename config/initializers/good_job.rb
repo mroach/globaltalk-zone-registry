@@ -25,6 +25,10 @@ Rails.application.configure do
       refresh_resolved_ip_cache: {
         cron: "every hour",
         class: "Exports::RefreshResolvedIPCacheJob"
+      },
+      update_endpoint_last_seen: {
+        cron: "every 10 minutes",
+        class: "Jrouter::UpdateLastSeenJob"
       }
     }
   }

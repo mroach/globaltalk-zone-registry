@@ -8,6 +8,7 @@
 #  ddns_password   :string
 #  ddns_subdomain  :citext
 #  disabled_at     :datetime
+#  last_seen_at    :datetime
 #  notes           :text
 #  ranges          :int4range        default([]), not null, is an Array
 #  static_endpoint :string
@@ -174,5 +175,11 @@ class Endpoint < ApplicationRecord
 
   def ddns_fqdn
     DDNS.fqdn_for(ddns_subdomain)
+  end
+
+  def seen_recently?(thresh = 24.hours)
+    return false if last_seen_at.nil?
+
+    last_seen_at > thresh.ago
   end
 end

@@ -45,6 +45,8 @@ module AppConfig
     register :google_client_id_path, :string, -> { AppConfig.config_dir.join("google_client_id.json") }
     register :google_token_store_path, :string, -> { AppConfig.config_dir.join("google_tokens.yaml") }
 
+    register :jrouter_url_base, :uri
+
     register :ddns_domain_name, :string
     register :ddns_nameserver, :string
     register :ddns_tsig_keyfile_path, :string, -> { AppConfig.config_dir.join("ddns_tsig_keyfile") }

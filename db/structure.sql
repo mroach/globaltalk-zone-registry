@@ -343,7 +343,8 @@ CREATE TABLE public.endpoints (
     ddns_password character varying,
     notes text,
     disabled_at timestamp(6) without time zone,
-    coordinates point
+    coordinates point,
+    last_seen_at timestamp without time zone
 );
 
 
@@ -362,7 +363,8 @@ CREATE TABLE public.external_zones (
     last_lookup_result character varying,
     last_lookup_at timestamp without time zone,
     last_ip inet,
-    coordinates point
+    coordinates point,
+    last_seen_at timestamp without time zone
 );
 
 
@@ -926,6 +928,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260313184849'),
 ('20260312183801'),
 ('20260311221415'),
 ('20260311153633'),
