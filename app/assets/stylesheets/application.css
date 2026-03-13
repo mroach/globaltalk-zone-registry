@@ -160,3 +160,7 @@ td, th {
   border: solid brown 1px;
   padding: 10px;
 }
+
+tbody tr:hover {
+  background-color: rgba(0,0,0,0.05);
+}
