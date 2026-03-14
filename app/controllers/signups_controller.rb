@@ -42,7 +42,7 @@ class SignupsController < ApplicationController
     if user.onboarded?
       redirect_to(after_authentication_url)
     else
-      redirect_to(onboarding_path, notice: "Email confirmed. Nice.")
+      redirect_to(onboarding_path, notice: "Email confirmed. Thanks.")
     end
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     redirect_to(new_signup_path, alert: "Confirmation email link is invalid or has expired")

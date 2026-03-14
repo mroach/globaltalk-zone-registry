@@ -7,15 +7,23 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if (user = User.authenticate_by(params.permit(:email_address, :password)))
-      start_new_session_for(user)
-      if user.onboarded?
-        redirect_to(after_authentication_url)
-      else
-        redirect_to(onboarding_path)
-      end
+    user = User.authenticate_by(params.permit(:email_address, :password))
+
+    if user.nil?
+      return redirect_to(new_session_path, alert: "Try another email address or password.")
+    end
+
+    unless user.email_confirmed?
+      SignupsMailer.confirmation(@user).deliver_later
+      return redirect_to(new_session_path, alert: "You haven't confirmed your email address.")
+    end
+
+    start_new_session_for(user)
+
+    if user.onboarded?
+      redirect_to(after_authentication_url)
     else
-      redirect_to(new_session_path, alert: "Try another email address or password.")
+      redirect_to(onboarding_path)
     end
   end
 

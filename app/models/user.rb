@@ -84,6 +84,10 @@ class User < ApplicationRecord
     generate_token_for(:email_confirmation)
   end
 
+  def email_confirmed?
+    email_confirmed_at?
+  end
+
   def has_role?(role)
     v = Role[role]
     roles.any? { it == v }
