@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "info@registry.globaltalk.network"
+  default from: "registry@globaltalk.network"
   layout "mailer"
 end
