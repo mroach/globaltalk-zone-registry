@@ -38,4 +38,6 @@ Rails.application.routes.draw do
   resources :zones
 
   root "home#index"
+
+  match "*unmatched", to: "errors#not_found", via: :all
 end
