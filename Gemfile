@@ -41,6 +41,7 @@ gem "appsignal"
 gem "ruby-vips"
 gem "maxmind-geoip2"
 gem "good_job"
+gem "altcha"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

@@ -34,5 +34,17 @@
     <%= form.label(:socials) %>
     <div><%= form.text_field :socials, required: false, autofocus: true  %></div>
   </div>
-  <%= form.submit "Sign up" %>
+
+  <div>
+    <div></div>
+    <div>
+      <%= form.submit "Sign up" %>
+      <%= form.hidden_field :altcha %>
+
+      <div style="margin-top: 10px;">
+        <altcha-widget challengeurl="<%= altcha_url %>" auto="onload"></altcha-widget>
+      </div>
+    </div>
+  </div>
+
 <% end %>

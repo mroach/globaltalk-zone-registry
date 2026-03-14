@@ -31,6 +31,8 @@ module AppConfig
       end
     end
 
+    register :altcha_hmac_key, :string, -> { Rails.configuration.secret_key_base }
+
     register :appsignal_push_api_key, :string
 
     register :database_host, :string

@@ -9,7 +9,15 @@
     <%= form.label(:password) %>
     <div><%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72 %></div>
   </div>
-  <%= form.submit "Sign in" %>
+
+  <div>
+    <div></div>
+    <div>
+      <%= form.submit "Sign in" %>
+      <%= form.hidden_field :altcha %>
+      <altcha-widget challengeurl="<%= altcha_url %>" auto="onload" floating></altcha-widget>
+    </div>
+  </div>
 <% end %>
 <br>
 

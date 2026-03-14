@@ -79,6 +79,7 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.9)
       public_suffix (>= 2.0.2, < 8.0)
+    altcha (1.0.0)
     amazing_print (2.0.0)
     annotaterb (4.22.0)
       activerecord (>= 6.0.0)
@@ -483,6 +484,7 @@ PLATFORMS
 
 DEPENDENCIES
   action_policy
+  altcha
   amazing_print
   annotaterb
   appsignal

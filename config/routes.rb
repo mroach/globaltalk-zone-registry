@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
   get "healthz" => "rails/health#show", :as => :rails_health_check
 
+  get "/altcha", to: "altcha#new", as: :altcha
+
   # for backwards compat until we get the user(s) migrated
   get "/pub/peers/all", to: "exports#all", as: :all_endpoints_export
   get "/pub/peers/ips", to: "exports#ips", as: :ip_endpoints_export

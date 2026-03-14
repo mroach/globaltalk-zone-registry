@@ -25,6 +25,12 @@ class SignupsController < ApplicationController
       :time_zone
     ).to_h.transform_values(&:presence).compact)
 
+    altcha = params.require("altcha")
+    unless Altcha.verify_solution(altcha, AppConfig.altcha_hmac_key!)
+      flash.now[:alert] = "Verification failed"
+      return render(:new, status: :bad_request)
+    end
+
     if @user.save
       SignupsMailer.confirmation(@user).deliver_later
 
